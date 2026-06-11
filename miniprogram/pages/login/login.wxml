@@ -1,0 +1,148 @@
+<view wx:if="{{showGuide}}" class="guide-page" bindtap="enterLogin">
+  <view class="guide-bg-card card-one"></view>
+  <view class="guide-bg-card card-two"></view>
+
+  <view class="classroom-scene">
+    <view class="board">
+      <view class="board-top">
+        <view class="board-title"></view>
+        <view class="board-chip"></view>
+      </view>
+      <view class="board-chart">
+        <view class="chart-column c1"></view>
+        <view class="chart-column c2"></view>
+        <view class="chart-column c3"></view>
+        <view class="chart-column c4"></view>
+      </view>
+      <view class="board-row">
+        <view class="row-avatar"></view>
+        <view class="row-line"></view>
+        <view class="row-check">✓</view>
+      </view>
+      <view class="board-row">
+        <view class="row-avatar warm"></view>
+        <view class="row-line short"></view>
+        <view class="row-check muted">·</view>
+      </view>
+    </view>
+
+    <view class="desk">
+      <view class="desk-screen">
+        <view class="qr-grid">
+          <view class="qr dark"></view>
+          <view class="qr"></view>
+          <view class="qr dark"></view>
+          <view class="qr"></view>
+          <view class="qr dark"></view>
+          <view class="qr"></view>
+          <view class="qr dark"></view>
+          <view class="qr"></view>
+          <view class="qr dark"></view>
+        </view>
+      </view>
+      <view class="desk-base"></view>
+    </view>
+
+    <view class="location-mark">
+      <view class="location-inner"></view>
+    </view>
+  </view>
+
+  <view class="guide-copy">
+    <text class="guide-title">课堂考勤</text>
+    <text class="guide-desc">扫码签到、位置校验、统计报表，一站式管理每一堂课。</text>
+  </view>
+</view>
+
+<view wx:if="{{!showGuide}}" class="auth-page">
+  <view class="auth-header">
+    <text class="auth-title">账号登录</text>
+    <text class="auth-desc">{{userType === 'teacher' ? '教师端可发起签到与查看统计' : '学生端可完成签到与查看记录'}}</text>
+  </view>
+
+  <view class="auth-card">
+    <view class="role-tabs">
+      <view class="role-tab {{userType === 'teacher' ? 'active' : ''}}" bindtap="switchRole" data-role="teacher">教师登录</view>
+      <view class="role-tab {{userType === 'student' ? 'active' : ''}}" bindtap="switchRole" data-role="student">学生登录</view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">{{userType === 'teacher' ? '工号' : '学号'}}</text>
+      <input class="input" placeholder="{{userType === 'teacher' ? '请输入工号' : '请输入学号'}}" value="{{userId}}" bindinput="onUserIdInput" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">密码</text>
+      <input class="input" placeholder="请输入密码" password value="{{password}}" bindinput="onPasswordInput" />
+    </view>
+
+    <view class="form-actions">
+      <text class="text-link" bindtap="openRegister">注册账号</text>
+      <text class="text-link" bindtap="openForgot">找回密码</text>
+    </view>
+
+    <button class="login-btn" bindtap="handleLogin">进入系统</button>
+  </view>
+
+  <view wx:if="{{showRegister}}" class="modal-mask" bindtap="closeRegister">
+    <view class="modal-card" catchtap="stopTap">
+      <view class="modal-header">
+        <text class="modal-title">{{userType === 'teacher' ? '教师注册' : '学生注册'}}</text>
+        <text class="modal-close" bindtap="closeRegister">×</text>
+      </view>
+
+      <view class="form-item compact">
+        <text class="label">{{userType === 'teacher' ? '工号' : '学号'}}</text>
+        <input class="input" data-field="userId" placeholder="{{userType === 'teacher' ? '请输入工号' : '请输入学号'}}" value="{{registerForm.userId}}" bindinput="onRegisterInput" />
+      </view>
+
+      <view class="form-item compact">
+        <text class="label">姓名</text>
+        <input class="input" data-field="name" placeholder="请输入姓名" value="{{registerForm.name}}" bindinput="onRegisterInput" />
+      </view>
+
+      <view wx:if="{{userType === 'student'}}" class="form-item compact">
+        <text class="label">班级</text>
+        <input class="input" data-field="className" placeholder="请输入班级" value="{{registerForm.className}}" bindinput="onRegisterInput" />
+      </view>
+
+      <view class="form-item compact">
+        <text class="label">手机号</text>
+        <input class="input" data-field="phone" type="number" maxlength="11" placeholder="请输入手机号" value="{{registerForm.phone}}" bindinput="onRegisterInput" />
+      </view>
+
+      <view class="form-item compact">
+        <text class="label">密码</text>
+        <input class="input" data-field="password" password placeholder="请设置密码" value="{{registerForm.password}}" bindinput="onRegisterInput" />
+      </view>
+
+      <button class="modal-btn" bindtap="handleRegister">完成注册</button>
+    </view>
+  </view>
+
+  <view wx:if="{{showForgot}}" class="modal-mask" bindtap="closeForgot">
+    <view class="modal-card" catchtap="stopTap">
+      <view class="modal-header">
+        <text class="modal-title">找回密码</text>
+        <text class="modal-close" bindtap="closeForgot">×</text>
+      </view>
+
+      <view class="form-item compact">
+        <text class="label">{{userType === 'teacher' ? '工号' : '学号'}}</text>
+        <input class="input" data-field="userId" placeholder="{{userType === 'teacher' ? '请输入工号' : '请输入学号'}}" value="{{forgotForm.userId}}" bindinput="onForgotInput" />
+      </view>
+
+      <view class="form-item compact">
+        <text class="label">注册手机号</text>
+        <input class="input" data-field="phone" type="number" maxlength="11" placeholder="请输入注册时填写的手机号" value="{{forgotForm.phone}}" bindinput="onForgotInput" />
+      </view>
+
+      <view wx:if="{{recoveredPassword}}" class="password-result">
+        <text class="result-label">你的密码是</text>
+        <text class="result-password">{{recoveredPassword}}</text>
+      </view>
+
+      <button class="modal-btn" bindtap="handleForgotPassword">验证并显示密码</button>
+    </view>
+  </view>
+</view>

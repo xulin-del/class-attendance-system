@@ -1,0 +1,52 @@
+<view class="page-container">
+  <view class="filter-bar">
+    <view class="date-picker" bindtap="showDatePicker">
+      <text class="date-text">{{selectedDate}}</text>
+      <text class="picker-arrow">▼</text>
+    </view>
+    <picker mode="date" value="{{selectedDate}}" start="2024-01-01" end="2030-12-31" bindchange="onDateChange" id="datePicker" hidden>
+    </picker>
+  </view>
+
+  <view class="stats-bar" wx:if="{{records.length > 0}}">
+    <view class="stats-item">
+      <text class="stats-value signed-color">{{signedCount}}</text>
+      <text class="stats-label">已签到</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-value absent-color">{{absentCount}}</text>
+      <text class="stats-label">缺勤</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-value unsigned-color">{{unsignedCount}}</text>
+      <text class="stats-label">未签到</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-value">{{records.length}}</text>
+      <text class="stats-label">总计</text>
+    </view>
+  </view>
+
+  <view class="record-list" wx:if="{{records.length > 0}}">
+    <view class="course-group" wx:for="{{groupedRecords}}" wx:key="courseName">
+      <view class="course-header">
+        <text class="course-title">{{item.courseName}}</text>
+        <text class="course-class">{{item.className}}</text>
+      </view>
+      <view class="record-item" wx:for="{{item.records}}" wx:for-item="record" wx:key="recordId">
+        <view class="record-info">
+          <text class="record-name">{{record.studentName}}</text>
+          <text class="record-id">{{record.studentId}}</text>
+        </view>
+        <view class="record-status status-{{record.status === '已签到' ? 'signed' : record.status === '缺勤' ? 'absent' : 'unsigned'}}">
+          <text class="status-text">{{record.status}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:else>
+    <text class="empty-icon">📭</text>
+    <text class="empty-text">该日期暂无签到记录</text>
+  </view>
+</view>

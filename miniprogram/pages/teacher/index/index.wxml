@@ -1,0 +1,160 @@
+<view class="page-container">
+  <view class="header">
+    <view class="user-info">
+      <view class="avatar">
+        <text class="avatar-text">{{userInfo.teacherName ? userInfo.teacherName[0] : '教'}}</text>
+      </view>
+      <view class="info">
+        <text class="name">{{userInfo.teacherName}}</text>
+        <text class="id">工号: {{userInfo.teacherId}}</text>
+      </view>
+    </view>
+  </view>
+  
+  <view class="content">
+    <view class="approval-banner" wx:if="{{pendingCount > 0}}" bindtap="goToApproval">
+      <text class="banner-icon">📢</text>
+      <text class="banner-text">您有 {{pendingCount}} 条补签申请待审批</text>
+      <text class="banner-arrow">></text>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">考勤概览</view>
+      <view class="stats-grid">
+        <view class="stat-item">
+          <text class="stat-value">{{stats.totalCourses}}</text>
+          <text class="stat-label">课程总数</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{stats.todaySign}}</text>
+          <text class="stat-label">今日签到</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{stats.totalStudents}}</text>
+          <text class="stat-label">学生总数</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="quick-entry">
+      <view class="quick-item" bindtap="goToRoster">
+        <view class="quick-icon-wrapper quick-roster">
+          <text class="quick-icon">📋</text>
+        </view>
+        <text class="quick-label">花名册</text>
+      </view>
+      <view class="quick-item" bindtap="goToHistory">
+        <view class="quick-icon-wrapper quick-history">
+          <text class="quick-icon">📝</text>
+        </view>
+        <text class="quick-label">签到记录</text>
+      </view>
+      <view class="quick-item" bindtap="goToSchedule">
+        <view class="quick-icon-wrapper quick-schedule">
+          <text class="quick-icon">📅</text>
+        </view>
+        <text class="quick-label">我的课表</text>
+      </view>
+      <view class="quick-item" bindtap="goToExport">
+        <view class="quick-icon-wrapper quick-export">
+          <text class="quick-icon">📊</text>
+        </view>
+        <text class="quick-label">导出报表</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="section-title">今日课程</view>
+      <view class="course-list" wx:if="{{courses.length > 0}}">
+        <view class="course-item" wx:for="{{courses}}" wx:key="courseId">
+          <view class="course-info">
+            <text class="course-name">{{item.courseName}}</text>
+            <text class="course-class">{{item.className}}</text>
+          </view>
+          <view class="course-action" bindtap="goToSign" data-course="{{item}}">
+            <text class="action-text">发起签到</text>
+          </view>
+        </view>
+      </view>
+      <view class="empty" wx:else>
+        <text class="empty-text">暂无课程</text>
+      </view>
+    </view>
+    
+    <view class="section">
+      <view class="ai-home-panel">
+        <view class="section-header">
+          <view>
+            <view class="section-title ai-title">AI考勤助手</view>
+            <view class="ai-subtitle">直接询问班级、课程和考勤数据</view>
+          </view>
+          <view class="ai-badge">AI</view>
+        </view>
+
+        <view class="ai-suggestions" wx:if="{{!aiAnswer && !aiLoading && aiHistory.length === 0}}">
+          <view class="ai-suggestion" bindtap="useAiSuggestion" data-question="今天各班的考勤情况如何？">今天各班的考勤情况如何？</view>
+          <view class="ai-suggestion" bindtap="useAiSuggestion" data-question="本周有哪些学生缺勤？">本周有哪些学生缺勤？</view>
+        </view>
+
+        <view class="ai-chat">
+          <view class="ai-message" wx:if="{{aiLoading}}">
+            <view class="ai-avatar">AI</view>
+            <view class="ai-bubble">正在分析考勤数据...</view>
+          </view>
+          <view class="ai-message" wx:if="{{aiAnswer && !aiLoading}}">
+            <view class="ai-avatar">AI</view>
+            <view class="ai-bubble">{{aiAnswer}}</view>
+          </view>
+          <view class="ai-history" wx:if="{{aiHistory.length > 0}}">
+            <view class="ai-history-header">
+              <text>最近问答</text>
+              <text class="ai-clear" bindtap="clearAiHistory">清空</text>
+            </view>
+            <view class="ai-history-item" wx:for="{{aiHistory}}" wx:key="index">
+              <view class="ai-history-question">Q：{{item.question}}</view>
+              <view class="ai-history-answer">A：{{item.answer}}</view>
+            </view>
+          </view>
+        </view>
+
+        <view class="ai-input-row">
+          <input
+            class="ai-input"
+            placeholder="输入考勤相关问题..."
+            value="{{aiQuestion}}"
+            bindinput="onAiInputChange"
+            bindconfirm="submitAiQuestion"
+            confirm-type="send"
+            disabled="{{aiLoading}}"
+          />
+          <view class="ai-send {{aiLoading ? 'disabled' : ''}}" bindtap="submitAiQuestion">
+            <text>{{aiLoading ? '...' : '发送'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="tabbar">
+    <view class="tabbar-item active" bindtap="switchTab" data-index="0">
+      <text class="tabbar-icon">🏠</text>
+      <text class="tabbar-text">首页</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="1">
+      <text class="tabbar-icon">📚</text>
+      <text class="tabbar-text">课程管理</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="2">
+      <text class="tabbar-icon">✅</text>
+      <text class="tabbar-text">发起签到</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="3">
+      <text class="tabbar-icon">📊</text>
+      <text class="tabbar-text">考勤统计</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="4">
+      <text class="tabbar-icon">👤</text>
+      <text class="tabbar-text">我的</text>
+    </view>
+  </view>
+</view>

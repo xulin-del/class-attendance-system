@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.attendance.mapper.ScheduleMapper">
+    <resultMap id="ScheduleMap" type="com.attendance.entity.Schedule">
+        <id property="id" column="id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="dayOfWeek" column="day_of_week"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="location" column="location"/>
+        <result property="weekStart" column="week_start"/>
+        <result property="weekEnd" column="week_end"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="courseName" column="course_name"/>
+        <result property="className" column="class_name"/>
+    </resultMap>
+
+    <select id="selectByTeacherId" resultMap="ScheduleMap">
+        SELECT s.*, c.course_name, c.class_name
+        FROM schedules s
+        LEFT JOIN courses c ON s.course_id = c.course_id
+        WHERE s.teacher_id = #{teacherId}
+        ORDER BY s.day_of_week, s.start_time
+    </select>
+
+    <select id="selectDistinctDaysByTeacherId" resultType="java.lang.Integer">
+        SELECT DISTINCT day_of_week
+        FROM schedules
+        WHERE teacher_id = #{teacherId}
+        ORDER BY day_of_week
+    </select>
+
+    <select id="selectByDayOfWeek" resultMap="ScheduleMap">
+        SELECT s.*, c.course_name, c.class_name
+        FROM schedules s
+        LEFT JOIN courses c ON s.course_id = c.course_id
+        WHERE s.day_of_week = #{dayOfWeek}
+        ORDER BY s.start_time
+    </select>
+</mapper>

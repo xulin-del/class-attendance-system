@@ -1,0 +1,58 @@
+# Java / Maven
+backend/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Logs and runtime files
+*.log
+logs/
+*.tmp
+*.temp
+
+# IDE and editor files
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# WeChat Mini Program local/private config
+project.private.config.json
+miniprogram/project.private.config.json
+
+# Multi-platform miniapp config not needed for WeChat-only backup
+project.miniapp.json
+miniprogram/app.miniapp.json
+
+# Local environment and secrets
+.env
+.env.*
+*.local
+application-local.properties
+application-dev.properties
+
+# Database backups / exports
+backups/
+*_backup.sql
+*_export.sql
+*.bak
+*.dump
+
+# Archives and generated packages
+*.zip
+*.rar
+*.7z
+
+# Tunneling tools / local executables
+ngrok.exe
+cloudflared.exe
+
+# Generated output folders
+outputs/
+dist/
+build/

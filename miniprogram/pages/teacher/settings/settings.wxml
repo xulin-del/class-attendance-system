@@ -1,0 +1,59 @@
+<view class="page-container">
+  <view class="settings-section">
+    <view class="section-title">通知设置</view>
+    <view class="setting-item">
+      <text class="setting-label">签到提醒</text>
+      <switch checked="{{signReminder}}" bindchange="toggleSignReminder" color="#2E7D32" />
+    </view>
+    <view class="setting-item">
+      <text class="setting-label">缺勤提醒</text>
+      <switch checked="{{absentReminder}}" bindchange="toggleAbsentReminder" color="#2E7D32" />
+    </view>
+  </view>
+
+  <view class="settings-section">
+    <view class="section-title">显示设置</view>
+    <view class="setting-item">
+      <text class="setting-label">显示学生头像</text>
+      <switch checked="{{showAvatar}}" bindchange="toggleShowAvatar" color="#2E7D32" />
+    </view>
+  </view>
+
+  <view class="settings-section">
+    <view class="section-title">签到设置</view>
+    <view class="setting-item">
+      <text class="setting-label">签到码有效期</text>
+      <picker mode="selector" range="{{expireOptions}}" range-key="label" bindchange="changeExpireTime">
+        <view class="picker-value">
+          <text>{{expireOptions[expireIndex].label}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+    <view class="setting-item">
+      <text class="setting-label">定位签到范围</text>
+      <picker mode="selector" range="{{radiusOptions}}" range-key="label" bindchange="changeRadius">
+        <view class="picker-value">
+          <text>{{radiusOptions[radiusIndex].label}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="settings-section">
+    <view class="section-title">其他</view>
+    <view class="setting-item" bindtap="clearCache">
+      <text class="setting-label">清除缓存</text>
+      <text class="setting-arrow">›</text>
+    </view>
+    <view class="setting-item" bindtap="checkUpdate">
+      <text class="setting-label">检查更新</text>
+      <text class="setting-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="version-info">
+    <text class="version-text">版本号: v1.0.0</text>
+  </view>
+</view>

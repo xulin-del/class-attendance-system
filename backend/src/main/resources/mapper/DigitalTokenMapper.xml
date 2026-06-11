@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.attendance.mapper.DigitalTokenMapper">
+    <select id="selectActiveByCourseId" resultType="com.attendance.entity.DigitalToken">
+        SELECT id, course_id AS courseId, teacher_id AS teacherId, token, status, create_time AS createTime, expire_time AS expireTime
+        FROM digital_tokens
+        WHERE course_id = #{courseId} AND status = 'active' AND expire_time > NOW()
+        ORDER BY create_time DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectByToken" resultType="com.attendance.entity.DigitalToken">
+        SELECT id, course_id AS courseId, teacher_id AS teacherId, token, status, create_time AS createTime, expire_time AS expireTime
+        FROM digital_tokens
+        WHERE token = #{token} AND status = 'active' AND expire_time > NOW()
+        LIMIT 1
+    </select>
+
+    <update id="expireByCourseId">
+        UPDATE digital_tokens SET status = 'expired' WHERE course_id = #{courseId}
+    </update>
+</mapper>

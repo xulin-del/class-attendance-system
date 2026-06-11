@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.attendance.mapper.LocationSignMapper">
+    <resultMap id="LocationSignMap" type="com.attendance.entity.LocationSign">
+        <id property="id" column="id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="signCode" column="sign_code"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="radius" column="radius"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="endTime" column="end_time"/>
+    </resultMap>
+
+    <select id="selectActiveByCourseId" resultMap="LocationSignMap">
+        SELECT * FROM location_signs
+        WHERE course_id = #{courseId} AND status = '进行中'
+        ORDER BY create_time DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectBySignCode" resultMap="LocationSignMap">
+        SELECT * FROM location_signs
+        WHERE sign_code = #{signCode}
+        LIMIT 1
+    </select>
+
+    <select id="selectByCourseId" resultMap="LocationSignMap">
+        SELECT * FROM location_signs
+        WHERE course_id = #{courseId}
+        ORDER BY create_time DESC
+    </select>
+</mapper>

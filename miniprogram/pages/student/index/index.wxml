@@ -1,0 +1,181 @@
+<view class="page-container">
+  <view class="header">
+    <view class="user-info">
+      <view class="avatar">
+        <text class="avatar-text">{{userInfo.studentName ? userInfo.studentName[0] : '学'}}</text>
+      </view>
+      <view class="info">
+        <text class="name">{{userInfo.studentName}}</text>
+        <text class="id">学号: {{userInfo.studentId}}</text>
+      </view>
+    </view>
+  </view>
+  
+  <view class="content">
+    <view class="sign-reminder-banner class-reminder-banner" wx:if="{{classReminders.length > 0}}" bindtap="onClassReminderTap">
+      <text class="banner-icon">📢</text>
+      <text class="banner-text">您有 {{classReminders.length}} 条上课提醒，点击查看课程详情</text>
+      <text class="banner-arrow">></text>
+    </view>
+
+    <view class="sign-reminder-banner" wx:if="{{courseSignReminders.length > 0}}" bindtap="onCourseSignReminderTap">
+      <text class="banner-icon">✅</text>
+      <text class="banner-text">您有 {{courseSignReminders.length}} 门课程正在签到，点击前往</text>
+      <text class="banner-arrow">></text>
+    </view>
+
+    <view class="progress-section">
+      <view class="progress-wrapper">
+        <canvas wx:if="{{!showClassReminderModal}}" type="2d" id="progressCanvas" class="progress-canvas"></canvas>
+        <view class="progress-center">
+          <text class="progress-value">{{stats.rate}}%</text>
+          <text class="progress-label">出勤率</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="stats-cards">
+      <view class="stat-card signed" bindtap="goToRecords" data-status="signed">
+        <text class="card-value">{{stats.signed}}</text>
+        <text class="card-label">正常出勤</text>
+      </view>
+      <view class="stat-card late" bindtap="goToRecords" data-status="late">
+        <text class="card-value">{{stats.late}}</text>
+        <text class="card-label">迟到</text>
+      </view>
+      <view class="stat-card absent" bindtap="goToRecords" data-status="absent">
+        <text class="card-value">{{stats.absent}}</text>
+        <text class="card-label">缺勤</text>
+      </view>
+    </view>
+
+    <view class="records-section">
+      <view class="section-header">
+        <text class="section-title">考勤明细</text>
+        <text class="section-more" bindtap="goToRecords">查看全部 ></text>
+      </view>
+      
+      <view class="records-list" wx:if="{{records.length > 0}}">
+        <view class="record-item" wx:for="{{records}}" wx:key="recordId">
+          <view class="record-dot {{item.status === '已签到' ? 'dot-signed' : item.status === '迟到' ? 'dot-late' : 'dot-absent'}}"></view>
+          <view class="record-info">
+            <text class="record-course">{{item.courseName}}</text>
+            <text class="record-date">{{item.signTime || '未签到'}}</text>
+          </view>
+          <view class="record-status status-{{item.status === '已签到' ? 'signed' : item.status === '迟到' ? 'late' : 'absent'}}">
+            <text class="status-text">{{item.status}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="empty" wx:if="{{records.length === 0 && !loading}}">
+        <text class="empty-icon">📋</text>
+        <text class="empty-text">暂无考勤记录</text>
+      </view>
+
+      <view class="loading-more" wx:if="{{loading}}">
+        <text class="loading-text">加载中...</text>
+      </view>
+      
+      <view class="no-more" wx:if="{{!hasMore && records.length > 0 && !loading}}">
+        <text class="no-more-text">没有更多了</text>
+      </view>
+    </view>
+
+    <view class="ai-section">
+      <view class="section-header">
+        <view>
+          <text class="section-title">AI考勤助手</text>
+          <text class="ai-subtitle">问问自己的签到、缺勤和出勤率</text>
+        </view>
+        <view class="ai-badge">AI</view>
+      </view>
+
+      <view class="ai-suggestions" wx:if="{{!aiAnswer && !aiLoading && aiHistory.length === 0}}">
+        <view class="ai-suggestion" bindtap="useAiSuggestion" data-question="我最近一周的考勤情况如何？">我最近一周的考勤情况如何？</view>
+        <view class="ai-suggestion" bindtap="useAiSuggestion" data-question="我有哪些缺勤记录？">我有哪些缺勤记录？</view>
+      </view>
+
+      <view class="ai-chat">
+        <view class="ai-message" wx:if="{{aiLoading}}">
+          <view class="ai-avatar">AI</view>
+          <view class="ai-bubble">正在分析考勤数据...</view>
+        </view>
+        <view class="ai-message" wx:if="{{aiAnswer && !aiLoading}}">
+          <view class="ai-avatar">AI</view>
+          <view class="ai-bubble">{{aiAnswer}}</view>
+        </view>
+        <view class="ai-history" wx:if="{{aiHistory.length > 0}}">
+          <view class="ai-history-header">
+            <text>最近问答</text>
+            <text class="ai-clear" bindtap="clearAiHistory">清空</text>
+          </view>
+          <view class="ai-history-item" wx:for="{{aiHistory}}" wx:key="index">
+            <view class="ai-history-question">Q：{{item.question}}</view>
+            <view class="ai-history-answer">A：{{item.answer}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="ai-input-row">
+        <input
+          class="ai-input"
+          placeholder="输入考勤相关问题..."
+          value="{{aiQuestion}}"
+          bindinput="onAiInputChange"
+          bindconfirm="submitAiQuestion"
+          confirm-type="send"
+          disabled="{{aiLoading}}"
+        />
+        <view class="ai-send {{aiLoading ? 'disabled' : ''}}" bindtap="submitAiQuestion">
+          <text>{{aiLoading ? '...' : '发送'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="tabbar">
+    <view class="tabbar-item active" bindtap="switchTab" data-index="0">
+      <text class="tabbar-icon">🏠</text>
+      <text class="tabbar-text">首页</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="1">
+      <text class="tabbar-icon">✅</text>
+      <text class="tabbar-text">签到中心</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="2">
+      <text class="tabbar-icon">📋</text>
+      <text class="tabbar-text">我的考勤</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="3">
+      <text class="tabbar-icon">👤</text>
+      <text class="tabbar-text">我的</text>
+    </view>
+  </view>
+
+  <view class="class-reminder-modal-mask" wx:if="{{showClassReminderModal}}" catchtap="closeClassReminderModal">
+    <view class="class-reminder-modal" catchtap="noop">
+      <view class="modal-accent">上课提醒</view>
+      <view class="modal-title">{{currentClassReminder.courseName}}</view>
+      <view class="modal-list">
+        <view class="modal-row">
+          <text class="modal-label">班级</text>
+          <text class="modal-value">{{currentClassReminder.className}}</text>
+        </view>
+        <view class="modal-row">
+          <text class="modal-label">地点</text>
+          <text class="modal-value">{{currentClassReminder.location}}</text>
+        </view>
+        <view class="modal-row">
+          <text class="modal-label">时间</text>
+          <text class="modal-value">{{currentClassReminder.time}}</text>
+        </view>
+        <view class="modal-row">
+          <text class="modal-label">老师</text>
+          <text class="modal-value">{{currentClassReminder.teacherName}}</text>
+        </view>
+      </view>
+      <view class="modal-confirm" bindtap="closeClassReminderModal">知道了</view>
+    </view>
+  </view>
+</view>

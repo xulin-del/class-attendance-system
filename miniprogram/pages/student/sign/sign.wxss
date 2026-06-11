@@ -1,0 +1,274 @@
+.page-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 120rpx;
+}
+
+.header {
+  background-color: #fff;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.content {
+  padding: 20rpx;
+}
+
+.section {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.picker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 24rpx;
+  border-radius: 12rpx;
+}
+
+.picker-text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.picker-arrow {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.sign-types {
+  display: flex;
+  gap: 20rpx;
+}
+
+.sign-type {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  border: 2rpx solid transparent;
+}
+
+.sign-type.active {
+  background-color: #f6ffed;
+  border-color: #52c41a;
+}
+
+.type-icon {
+  font-size: 48rpx;
+  margin-bottom: 12rpx;
+}
+
+.type-name {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.sign-area {
+  margin-top: 20rpx;
+}
+
+.sign-box {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 40rpx;
+  text-align: center;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.scan-btn, .location-btn {
+  width: 100%;
+  height: 120rpx;
+  background-color: #52c41a;
+  color: #fff;
+  font-size: 32rpx;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.code-divider {
+  display: flex;
+  align-items: center;
+  margin: 30rpx 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1rpx;
+  background-color: #e0e0e0;
+}
+
+.divider-text {
+  font-size: 24rpx;
+  color: #999;
+  padding: 0 20rpx;
+}
+
+.code-input-area {
+  display: flex;
+  gap: 16rpx;
+  align-items: center;
+}
+
+.code-input {
+  flex: 1;
+  height: 80rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.code-submit-btn {
+  width: 140rpx;
+  height: 80rpx;
+  background-color: #1677FF;
+  color: #fff;
+  font-size: 28rpx;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0;
+}
+
+.btn-icon {
+  font-size: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.btn-text {
+  font-size: 28rpx;
+}
+
+.location-info {
+  margin-bottom: 30rpx;
+  padding: 20rpx;
+  background-color: #f6ffed;
+  border-radius: 12rpx;
+}
+
+.location-label {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.location-value {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.digital-sign-box {
+  padding: 50rpx 40rpx;
+}
+
+.digital-desc {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+  text-align: center;
+}
+
+.digital-btn {
+  width: 100%;
+  height: 120rpx;
+  background: linear-gradient(135deg, #722ed1, #b37feb);
+  color: #fff;
+  font-size: 32rpx;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin-top: 30rpx;
+}
+
+.tips {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-top: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.tip-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.tip-item {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100rpx;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.08);
+  z-index: 100;
+}
+
+.tabbar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10rpx 20rpx;
+}
+
+.tabbar-icon {
+  font-size: 40rpx;
+  margin-bottom: 4rpx;
+}
+
+.tabbar-text {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.tabbar-item.active .tabbar-text {
+  color: #52c41a;
+  font-weight: bold;
+}

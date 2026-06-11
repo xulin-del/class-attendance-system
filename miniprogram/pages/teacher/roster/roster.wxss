@@ -1,0 +1,116 @@
+.page-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20rpx;
+}
+
+.class-selector {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.picker-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.picker-arrow {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.summary {
+  padding: 16rpx 10rpx;
+}
+
+.summary-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.student-list {
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.student-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.student-item:last-child {
+  border-bottom: none;
+}
+
+.student-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  background: linear-gradient(135deg, #1677FF, #69b1ff);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.avatar-text {
+  font-size: 28rpx;
+  color: #fff;
+  font-weight: bold;
+}
+
+.student-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.student-name {
+  font-size: 30rpx;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.student-id {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.student-class-tag {
+  background-color: #f0f5ff;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+}
+
+.tag-text {
+  font-size: 22rpx;
+  color: #1677FF;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}

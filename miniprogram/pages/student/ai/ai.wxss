@@ -1,0 +1,261 @@
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 120rpx;
+}
+
+.header {
+  background: linear-gradient(135deg, #2E7D32, #43A047);
+  padding: 40rpx 30rpx;
+  text-align: center;
+  color: white;
+}
+
+.header-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  display: block;
+}
+
+.header-desc {
+  font-size: 24rpx;
+  opacity: 0.85;
+  display: block;
+  margin-top: 8rpx;
+}
+
+.suggestions {
+  padding: 24rpx 30rpx;
+}
+
+.section-title {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.suggestion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.suggestion-item {
+  background: white;
+  border-radius: 16rpx;
+  padding: 24rpx 28rpx;
+  font-size: 28rpx;
+  color: #333;
+  border: 1rpx solid #e8e8e8;
+  transition: all 0.2s;
+}
+
+.suggestion-item:active {
+  background: #f0f7f0;
+  border-color: #2E7D32;
+}
+
+.answer-area {
+  padding: 24rpx 30rpx;
+}
+
+.answer-card {
+  background: white;
+  border-radius: 16rpx;
+  padding: 28rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.answer-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.answer-avatar {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2E7D32, #43A047);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  font-weight: bold;
+  margin-right: 16rpx;
+}
+
+.answer-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.answer-content {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.7;
+  padding: 16rpx 0;
+}
+
+.answer-loading {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+}
+
+.loading-dots {
+  display: flex;
+  gap: 8rpx;
+  margin-right: 16rpx;
+}
+
+.dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #2E7D32;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+.loading-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.history {
+  padding: 0 30rpx 24rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.clear-btn {
+  font-size: 24rpx;
+  color: #2E7D32;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.history-item {
+  background: white;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+}
+
+.history-question,
+.history-answer {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8rpx;
+}
+
+.history-icon {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background: #2E7D32;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20rpx;
+  font-weight: bold;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.history-icon-a {
+  background: #1976D2;
+}
+
+.history-text {
+  font-size: 26rpx;
+  color: #333;
+  flex: 1;
+  line-height: 1.5;
+}
+
+.history-answer .history-text {
+  color: #666;
+}
+
+.history-time {
+  font-size: 22rpx;
+  color: #bbb;
+  margin-left: 48rpx;
+}
+
+.input-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 16rpx 24rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.question-input {
+  flex: 1;
+  height: 72rpx;
+  background: #f5f5f5;
+  border-radius: 36rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+}
+
+.send-btn {
+  width: 120rpx;
+  height: 72rpx;
+  background: linear-gradient(135deg, #2E7D32, #43A047);
+  border-radius: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.send-btn.disabled {
+  opacity: 0.5;
+}

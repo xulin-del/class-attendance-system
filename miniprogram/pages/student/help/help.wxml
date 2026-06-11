@@ -1,0 +1,70 @@
+<view class="page-container">
+  <view class="help-section">
+    <view class="section-title">一、签到方式</view>
+    <view class="help-item">
+      <text class="help-text">1. 签到码签到：输入教师提供的6位签到码完成签到。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">2. 定位签到：在有效范围内自动定位签到。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">3. 数字口令签到：在有效期内输入教师提供的4位数字口令。</text>
+    </view>
+  </view>
+
+  <view class="help-section">
+    <view class="section-title">二、签到注意事项</view>
+    <view class="help-item">
+      <text class="help-text">1. 签到码有效期为30分钟，超时无法签到。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">2. 定位签到需开启手机定位权限。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">3. 数字口令有效期为60秒，需及时输入。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">4. 未在规定时间内签到将被标记为缺勤。</text>
+    </view>
+  </view>
+
+  <view class="help-section">
+    <view class="section-title">三、考勤报告</view>
+    <view class="help-item">
+      <text class="help-text">1. 首页显示个人考勤统计和出勤率。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">2. 可以查看历史签到记录。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">3. 支持按状态筛选记录（正常、迟到、缺勤）。</text>
+    </view>
+  </view>
+
+  <view class="help-section">
+    <view class="section-title">四、上课提醒</view>
+    <view class="help-item">
+      <text class="help-text">1. 在"上课提醒"页面订阅课程提醒。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">2. 系统会在上课前5分钟推送提醒消息。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">3. 每次订阅只能接收一次提醒，需重新订阅。</text>
+    </view>
+  </view>
+
+  <view class="help-section">
+    <view class="section-title">五、请假申请</view>
+    <view class="help-item">
+      <text class="help-text">1. 如需请假，请联系任课教师处理。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">2. 教师审批后可进行补签。</text>
+    </view>
+  </view>
+
+  <view class="contact-section">
+    <text class="contact-text">如有其他问题，请联系班主任或任课教师</text>
+  </view>
+</view>

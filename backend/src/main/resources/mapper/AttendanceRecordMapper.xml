@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.attendance.mapper.AttendanceRecordMapper">
+    <resultMap id="AttendanceRecordMap" type="com.attendance.entity.AttendanceRecord">
+        <id property="recordId" column="record_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="signTime" column="sign_time"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="studentName" column="student_name"/>
+    </resultMap>
+    
+    <select id="selectByCourseId" resultMap="AttendanceRecordMap">
+        SELECT ar.*, s.student_name 
+        FROM attendance_records ar 
+        LEFT JOIN students s ON ar.student_id = s.student_id 
+        WHERE ar.course_id = #{courseId}
+        ORDER BY s.student_name
+    </select>
+    
+    <select id="selectByStudentId" resultMap="AttendanceRecordMap">
+        SELECT ar.*, s.student_name 
+        FROM attendance_records ar 
+        LEFT JOIN students s ON ar.student_id = s.student_id 
+        WHERE ar.student_id = #{studentId}
+        ORDER BY ar.create_time DESC
+    </select>
+    
+    <select id="selectByCourseIdAndStudentId" resultType="com.attendance.entity.AttendanceRecord">
+        SELECT record_id AS recordId, course_id AS courseId, student_id AS studentId, sign_time AS signTime, status, create_time AS createTime
+        FROM attendance_records 
+        WHERE course_id = #{courseId} AND student_id = #{studentId}
+        ORDER BY create_time DESC
+        LIMIT 1
+    </select>
+    
+    <select id="selectDailyStatsByTeacherId" resultType="java.util.Map">
+        SELECT 
+            DATE(ar.create_time) as date,
+            COUNT(DISTINCT ar.student_id, ar.course_id) as total,
+            SUM(CASE WHEN ar.status = '已签到' THEN 1 ELSE 0 END) as signed
+        FROM attendance_records ar
+        JOIN courses c ON ar.course_id = c.course_id
+        WHERE c.teacher_id = #{teacherId}
+            AND DATE(ar.create_time) BETWEEN #{startDate} AND #{endDate}
+        GROUP BY DATE(ar.create_time)
+        ORDER BY DATE(ar.create_time) ASC
+    </select>
+
+    <select id="selectRecordsByTeacherIdAndDate" resultType="java.util.Map">
+        SELECT 
+            ar.record_id AS recordId,
+            ar.course_id AS courseId,
+            ar.student_id AS studentId,
+            ar.sign_time AS signTime,
+            ar.status,
+            ar.create_time AS createTime,
+            s.student_name AS studentName,
+            c.course_name AS courseName,
+            c.class_name AS className
+        FROM attendance_records ar
+        JOIN courses c ON ar.course_id = c.course_id
+        LEFT JOIN students s ON ar.student_id = s.student_id
+        WHERE c.teacher_id = #{teacherId}
+            AND DATE(ar.create_time) = #{date}
+        ORDER BY c.course_name, s.student_name
+    </select>
+
+    <select id="selectStudentRecordsWithCourse" resultType="java.util.Map">
+        SELECT 
+            ar.record_id AS recordId,
+            ar.course_id AS courseId,
+            ar.sign_time AS signTime,
+            ar.status,
+            ar.create_time AS createTime,
+            c.course_name AS courseName,
+            c.class_name AS className
+        FROM attendance_records ar
+        JOIN courses c ON ar.course_id = c.course_id
+        WHERE ar.student_id = #{studentId}
+        ORDER BY ar.create_time DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countStudentRecords" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM attendance_records WHERE student_id = #{studentId}
+    </select>
+
+    <select id="selectRecordsByTeacherId" resultType="java.util.Map">
+        SELECT 
+            ar.student_id,
+            MAX(CASE WHEN ar.status = '已签到' THEN 1 ELSE 0 END) as has_signed,
+            MAX(CASE WHEN ar.status = '缺勤' THEN 1 ELSE 0 END) as has_absent,
+            MAX(CASE WHEN ar.status = '迟到' THEN 1 ELSE 0 END) as has_late
+        FROM attendance_records ar
+        JOIN courses c ON ar.course_id = c.course_id
+        WHERE c.teacher_id = #{teacherId}
+        GROUP BY ar.student_id
+    </select>
+
+    <select id="countCoursesByTeacherId" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT c.course_id)
+        FROM courses c
+        WHERE c.teacher_id = #{teacherId}
+    </select>
+
+    <select id="countStudentsByTeacherId" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT s.student_id)
+        FROM students s
+        JOIN courses c ON s.class_name = c.class_name
+        WHERE c.teacher_id = #{teacherId}
+    </select>
+
+    <select id="countTodaySignedByTeacherId" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM attendance_records ar
+        JOIN courses c ON ar.course_id = c.course_id
+        WHERE c.teacher_id = #{teacherId}
+            AND ar.status = '已签到'
+            AND DATE(ar.create_time) = #{date}
+    </select>
+</mapper>

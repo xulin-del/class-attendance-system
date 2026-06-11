@@ -1,0 +1,603 @@
+page {
+  background-color: #f3eadb;
+  color: #1f2a24;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.container {
+  padding: 24rpx;
+}
+
+.card {
+  background-color: #ffffff;
+  border: 1rpx solid rgba(37, 71, 54, 0.08);
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 10rpx 28rpx rgba(31, 42, 36, 0.06);
+}
+
+.btn-primary {
+  background-color: #2f7d4a;
+  color: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 40rpx;
+  font-size: 28rpx;
+  border: none;
+  box-shadow: 0 10rpx 22rpx rgba(47, 125, 74, 0.22);
+}
+
+.btn-primary:active {
+  background-color: #25683d;
+}
+
+.text-primary {
+  color: #2f7d4a;
+}
+
+.text-success {
+  color: #2f8f56;
+}
+
+.text-danger {
+  color: #d94841;
+}
+
+.text-warning {
+  color: #c47a1b;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-20 {
+  margin-top: 20rpx;
+}
+
+.mb-20 {
+  margin-bottom: 20rpx;
+}
+
+/* Logged-in app theme */
+.page-container {
+  background:
+    linear-gradient(180deg, rgba(45, 130, 124, 0.10) 0%, rgba(243, 234, 219, 0) 280rpx),
+    #f3eadb !important;
+}
+
+.page-container .header,
+.page-container .header-bar {
+  background:
+    linear-gradient(135deg, #2d827c 0%, #315f58 100%) !important;
+  color: #fff !important;
+  border-bottom: none !important;
+}
+
+.page-container .title,
+.page-container .header-title {
+  color: #fff !important;
+}
+
+.page-container .section,
+.page-container .card,
+.page-container .stats-card,
+.page-container .stat-card,
+.page-container .course-card,
+.page-container .application-card,
+.page-container .info-card,
+.page-container .menu-card,
+.page-container .sign-box,
+.page-container .tips,
+.page-container .week-view,
+.page-container .schedule-list,
+.page-container .answer-card {
+  background-color: rgba(255, 251, 243, 0.96) !important;
+  border: 1rpx solid rgba(73, 57, 38, 0.10) !important;
+  box-shadow: 0 12rpx 30rpx rgba(73, 57, 38, 0.07) !important;
+}
+
+.page-container .section-title,
+.page-container .stats-title,
+.page-container .course-name,
+.page-container .menu-text,
+.page-container .name {
+  color: #241a12 !important;
+}
+
+.page-container .header .name,
+.page-container .header .id,
+.page-container .header .class,
+.page-container .header .desc,
+.page-container .header .subtitle,
+.page-container .header-title,
+.page-container .header-desc {
+  color: #fff !important;
+}
+
+.page-container .section-title {
+  border-left-color: #ff7654 !important;
+}
+
+.page-container .btn-primary,
+.page-container .add-btn,
+.page-container .start-btn,
+.page-container .submit-btn,
+.page-container .scan-btn,
+.page-container .location-btn,
+.page-container .digital-btn,
+.page-container .code-submit-btn,
+.page-container .confirm-btn,
+.page-container .course-action {
+  background: linear-gradient(135deg, #ff7654 0%, #f19b62 100%) !important;
+  color: #20150f !important;
+  border: none !important;
+  box-shadow: 0 10rpx 22rpx rgba(171, 88, 57, 0.18) !important;
+}
+
+.page-container .add-text,
+.page-container .add-btn-text,
+.page-container .action-text,
+.page-container .btn-text {
+  color: #20150f !important;
+}
+
+.page-container .picker,
+.page-container .form-input,
+.page-container .input,
+.page-container .code-input,
+.page-container .question-input,
+.page-container .filter-item,
+.page-container .stats-item,
+.page-container .stat-item,
+.page-container .chart-empty {
+  background-color: rgba(255, 248, 234, 0.72) !important;
+  border-color: rgba(73, 57, 38, 0.12) !important;
+}
+
+.page-container .text-primary,
+.page-container .stat-value,
+.page-container .stats-value,
+.page-container .avatar-text,
+.page-container .tabbar-item.active .tabbar-text,
+.page-container .section-more,
+.page-container .edit,
+.page-container .edit-btn .action-text {
+  color: #2d827c !important;
+}
+
+.page-container .text-success,
+.page-container .green,
+.page-container .dot-signed,
+.page-container .status-signed .status-text,
+.page-container .stat-card.signed .card-value {
+  color: #2d827c !important;
+}
+
+.page-container .dot-signed {
+  background-color: #2d827c !important;
+}
+
+.page-container .text-warning,
+.page-container .orange,
+.page-container .dot-late,
+.page-container .status-late .status-text,
+.page-container .stat-card.late .card-value {
+  color: #c7783d !important;
+}
+
+.page-container .dot-late {
+  background-color: #c7783d !important;
+}
+
+.page-container .text-danger,
+.page-container .red,
+.page-container .dot-absent,
+.page-container .status-absent .status-text,
+.page-container .stat-card.absent .card-value {
+  color: #d65f4c !important;
+}
+
+.page-container .dot-absent {
+  background-color: #d65f4c !important;
+}
+
+.page-container .status-signed,
+.page-container .sign-type.active {
+  background-color: rgba(45, 130, 124, 0.12) !important;
+  border-color: rgba(45, 130, 124, 0.42) !important;
+}
+
+.page-container .status-late {
+  background-color: rgba(199, 120, 61, 0.12) !important;
+}
+
+.page-container .status-absent {
+  background-color: rgba(214, 95, 76, 0.12) !important;
+}
+
+.page-container .tabbar {
+  background-color: rgba(255, 251, 243, 0.97) !important;
+  box-shadow: 0 -10rpx 28rpx rgba(73, 57, 38, 0.08) !important;
+}
+
+.page-container .tabbar-item.active {
+  background: rgba(45, 130, 124, 0.12) !important;
+}
+
+/* Login-inspired app theme for teacher and student pages */
+.page-container,
+.container {
+  min-height: 100vh !important;
+  box-sizing: border-box !important;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(67, 178, 156, 0.16), transparent 28%),
+    linear-gradient(180deg, #f8fbfa 0%, #e9f2ef 360rpx, #f7fbf8 100%) !important;
+  color: #17212b !important;
+}
+
+.page-container .content,
+.page-container .course-list,
+.page-container .records-list,
+.page-container .student-list,
+.page-container .schedule-list,
+.container .suggestions,
+.container .answer-section,
+.container .history-section {
+  box-sizing: border-box !important;
+}
+
+.page-container .header,
+.page-container .header-bar,
+.container .header {
+  background: rgba(255, 255, 255, 0.86) !important;
+  color: #17212b !important;
+  border: 2rpx solid rgba(38, 53, 71, 0.08) !important;
+  border-radius: 0 0 28rpx 28rpx !important;
+  box-shadow: 0 18rpx 42rpx rgba(38, 53, 71, 0.09) !important;
+}
+
+.page-container .header .title,
+.page-container .header .name,
+.page-container .header .id,
+.page-container .header .class,
+.page-container .header .desc,
+.page-container .header .subtitle,
+.page-container .title,
+.page-container .header-title,
+.page-container .header-desc,
+.container .header-title,
+.container .header-desc {
+  color: #17212b !important;
+  letter-spacing: 0 !important;
+}
+
+.page-container .header .id,
+.page-container .header .class,
+.page-container .header .desc,
+.page-container .header .subtitle,
+.page-container .header-desc,
+.container .header-desc {
+  color: #61707b !important;
+}
+
+.page-container .avatar,
+.page-container .header-icon,
+.container .header-icon {
+  background: #eef8f5 !important;
+  color: #247e73 !important;
+  border: 2rpx solid rgba(36, 126, 115, 0.12) !important;
+  border-radius: 22rpx !important;
+  box-shadow: none !important;
+}
+
+.page-container .avatar-text,
+.page-container .text-primary,
+.page-container .stat-value,
+.page-container .stats-value,
+.page-container .section-more,
+.page-container .edit,
+.page-container .ai-clear,
+.page-container .tabbar-item.active .tabbar-icon,
+.page-container .tabbar-item.active .tabbar-text,
+.container .ai-clear,
+.container .clear-btn {
+  color: #247e73 !important;
+}
+
+.page-container .section,
+.page-container .card,
+.page-container .quick-entry,
+.page-container .stats-card,
+.page-container .stat-card,
+.page-container .course-card,
+.page-container .application-card,
+.page-container .info-card,
+.page-container .menu-card,
+.page-container .sign-box,
+.page-container .tips,
+.page-container .week-view,
+.page-container .schedule-card,
+.page-container .student-item,
+.page-container .record-item,
+.page-container .records-section,
+.page-container .progress-section,
+.page-container .ai-section,
+.page-container .answer-card,
+.page-container .qrcode-box,
+.page-container .location-box,
+.page-container .location-info-card,
+.page-container .digital-box,
+.page-container .digital-sign-box,
+.container .suggestions,
+.container .answer-card,
+.container .history-item {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 2rpx solid rgba(38, 53, 71, 0.08) !important;
+  border-radius: 24rpx !important;
+  box-shadow: 0 18rpx 42rpx rgba(38, 53, 71, 0.08) !important;
+}
+
+.page-container .section-title,
+.page-container .stats-title,
+.page-container .course-name,
+.page-container .menu-text,
+.page-container .student-name,
+.page-container .item-course,
+.page-container .card-course,
+.page-container .ring-value,
+.page-container .modal-title,
+.page-container .tip-title,
+.container .section-title,
+.container .answer-name {
+  color: #17212b !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}
+
+.page-container .section-title {
+  border-left-color: #ff7654 !important;
+}
+
+.page-container .btn-primary,
+.page-container .add-btn,
+.page-container .start-btn,
+.page-container .submit-btn,
+.page-container .scan-btn,
+.page-container .location-btn,
+.page-container .digital-btn,
+.page-container .code-submit-btn,
+.page-container .confirm-btn,
+.page-container .course-action,
+.page-container .modal-confirm,
+.page-container .approve-btn,
+.page-container .apply-btn,
+.page-container .ai-send,
+.container .send-btn {
+  background: #ff7654 !important;
+  color: #17212b !important;
+  border: none !important;
+  border-radius: 999rpx !important;
+  box-shadow: 0 16rpx 28rpx rgba(255, 118, 84, 0.20) !important;
+  font-weight: 800 !important;
+}
+
+.page-container .add-text,
+.page-container .add-btn-text,
+.page-container .action-text,
+.page-container .btn-text,
+.page-container .confirm-btn,
+.page-container .modal-confirm,
+.page-container .approve-btn,
+.page-container .apply-btn,
+.page-container .ai-send,
+.container .send-btn {
+  color: #17212b !important;
+}
+
+.page-container button::after,
+.container button::after {
+  border: none !important;
+}
+
+.page-container .picker,
+.page-container .form-input,
+.page-container .input,
+.page-container .code-input,
+.page-container .question-input,
+.page-container .radius-input,
+.page-container .filter-item,
+.page-container .stats-item,
+.page-container .stat-item,
+.page-container .chart-empty,
+.page-container .sign-type,
+.page-container .duration-item,
+.page-container .form-picker,
+.page-container .picker-value,
+.page-container .input-box,
+.page-container .key,
+.page-container .digital-token,
+.page-container .radius-setting,
+.page-container .code-input-area,
+.page-container .ai-suggestion,
+.page-container .ai-bubble,
+.page-container .ai-input-row,
+.container .suggestion-item,
+.container .input-wrapper,
+.container .question-input {
+  background: #f7faf9 !important;
+  border: 2rpx solid #d9e3df !important;
+  border-radius: 22rpx !important;
+  color: #17212b !important;
+  box-shadow: none !important;
+}
+
+.page-container .quick-icon-wrapper,
+.page-container .ai-badge,
+.page-container .ai-avatar,
+.page-container .student-avatar,
+.page-container .student-class-tag,
+.page-container .item-color,
+.page-container .legend-green,
+.page-container .input-box.filled,
+.container .answer-avatar,
+.container .history-icon {
+  background: #eef8f5 !important;
+  color: #247e73 !important;
+}
+
+.page-container .approval-banner,
+.page-container .sign-reminder-banner,
+.page-container .class-reminder-banner {
+  background: #263547 !important;
+  border-radius: 24rpx !important;
+  box-shadow: 0 18rpx 34rpx rgba(38, 53, 71, 0.16) !important;
+}
+
+.page-container .text-success,
+.page-container .green,
+.page-container .dot-signed,
+.page-container .status-signed .status-text,
+.page-container .stat-card.signed .card-value,
+.page-container .signed .stat-value {
+  color: #247e73 !important;
+}
+
+.page-container .dot-signed,
+.page-container .stat-card.signed::before {
+  background: #247e73 !important;
+}
+
+.page-container .text-warning,
+.page-container .orange,
+.page-container .dot-late,
+.page-container .status-late .status-text,
+.page-container .stat-card.late .card-value {
+  color: #d5853a !important;
+}
+
+.page-container .dot-late,
+.page-container .stat-card.late::before {
+  background: #d5853a !important;
+}
+
+.page-container .text-danger,
+.page-container .red,
+.page-container .dot-absent,
+.page-container .status-absent .status-text,
+.page-container .stat-card.absent .card-value,
+.page-container .absent .stat-value,
+.page-container .delete,
+.page-container .reject-btn,
+.page-container .remove-image,
+.page-container .delete-btn .action-text,
+.page-container .delete-icon,
+.page-container .key.delete {
+  color: #d95f4c !important;
+}
+
+.page-container .dot-absent,
+.page-container .stat-card.absent::before {
+  background: #d95f4c !important;
+}
+
+.page-container .status-signed,
+.page-container .sign-type.active,
+.page-container .duration-item.active {
+  background: #eef8f5 !important;
+  border-color: rgba(36, 126, 115, 0.38) !important;
+}
+
+.page-container .status-late {
+  background: #fff5e8 !important;
+}
+
+.page-container .status-absent,
+.page-container .delete-btn,
+.page-container .action-btn.delete,
+.page-container .cancel-btn,
+.page-container .cancel,
+.page-container .end-btn,
+.page-container .logout-btn {
+  background: #fff1ef !important;
+  border-color: rgba(217, 95, 76, 0.18) !important;
+}
+
+.page-container .edit-btn,
+.page-container .action-btn.edit {
+  background: #eef8f5 !important;
+  color: #247e73 !important;
+  border-radius: 999rpx !important;
+}
+
+.page-container .course-item,
+.page-container .record-item,
+.page-container .menu-item,
+.page-container .info-row,
+.page-container .modal-row,
+.page-container .ai-history-item {
+  border-bottom-color: rgba(38, 53, 71, 0.08) !important;
+}
+
+.page-container .modal-content,
+.page-container .modal-container,
+.page-container .class-reminder-modal {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 2rpx solid rgba(38, 53, 71, 0.08) !important;
+  border-radius: 28rpx !important;
+  box-shadow: 0 28rpx 64rpx rgba(38, 53, 71, 0.18) !important;
+}
+
+.page-container .modal-mask,
+.page-container .class-reminder-modal-mask {
+  background: rgba(23, 33, 43, 0.45) !important;
+}
+
+.page-container .empty,
+.page-container .loading-more,
+.page-container .no-more,
+.page-container .student-id,
+.page-container .summary-text,
+.page-container .item-detail,
+.page-container .card-class,
+.page-container .card-time,
+.page-container .card-location,
+.page-container .ring-label,
+.page-container .digital-desc,
+.page-container .digital-hint,
+.page-container .tip-item {
+  color: #61707b !important;
+}
+
+.page-container .tabbar {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-top: 2rpx solid rgba(38, 53, 71, 0.08) !important;
+  box-shadow: 0 -12rpx 30rpx rgba(38, 53, 71, 0.08) !important;
+}
+
+.page-container .tabbar-item {
+  border-radius: 999rpx !important;
+}
+
+.page-container .tabbar-item.active {
+  background: #eef8f5 !important;
+}
+
+.page-container .tabbar-text {
+  color: #61707b !important;
+  letter-spacing: 0 !important;
+}

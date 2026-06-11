@@ -1,0 +1,127 @@
+<view class="page-container">
+  <view class="header-bar">
+    <view class="add-btn" bindtap="showAddModal">
+      <text class="add-btn-text">+ 添加课程</text>
+    </view>
+  </view>
+
+  <view class="week-view">
+    <view class="week-header">
+      <view class="week-day" wx:for="{{weekDays}}" wx:key="day">
+        <text class="day-name">{{item.name}}</text>
+        <text class="day-date">{{item.date}}</text>
+      </view>
+    </view>
+
+    <view class="week-body">
+      <view class="time-column">
+        <view class="time-slot" wx:for="{{timeSlots}}" wx:key="index">
+          <text class="time-text">{{item}}</text>
+        </view>
+      </view>
+
+      <view class="schedule-grid">
+        <view class="day-column" wx:for="{{scheduleGrid}}" wx:for-index="dayIndex" wx:for-item="dayColumn" wx:key="dayIndex">
+          <view class="cell" wx:for="{{dayColumn}}" wx:for-index="timeIndex" wx:for-item="schedule" wx:key="timeIndex">
+            <view class="schedule-card" 
+              wx:if="{{schedule}}" 
+              style="background: {{schedule.color}}"
+              bindtap="onScheduleTap"
+              data-schedule="{{schedule}}">
+              <text class="card-course">{{schedule.courseName}}</text>
+              <text class="card-class">{{schedule.className}}</text>
+              <text class="card-time">{{schedule.startTime}}-{{schedule.endTime}}</text>
+              <text class="card-location" wx:if="{{schedule.location}}">{{schedule.location}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="schedule-list" wx:if="{{schedules.length > 0}}">
+    <view class="list-title">课程安排列表</view>
+    <view class="schedule-item" wx:for="{{schedules}}" wx:key="id" bindtap="onScheduleTap" data-schedule="{{item}}">
+      <view class="item-color" style="background: {{item.color}}"></view>
+      <view class="item-info">
+        <text class="item-course">{{item.courseName}}</text>
+        <text class="item-detail">{{weekDayNames[item.dayOfWeek - 1]}} {{item.startTime}}-{{item.endTime}}</text>
+        <text class="item-detail" wx:if="{{item.location}}">{{item.location}}</text>
+        <text class="item-detail">第{{item.weekStart}}-{{item.weekEnd}}周 · {{item.className}}</text>
+      </view>
+      <view class="item-actions">
+        <view class="action-btn edit-btn" catchtap="onEditSchedule" data-schedule="{{item}}">
+          <text class="action-text">编辑</text>
+        </view>
+        <view class="action-btn delete-btn" catchtap="onDeleteSchedule" data-schedule="{{item}}">
+          <text class="action-text">删除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{schedules.length === 0}}">
+    <text class="empty-icon">📅</text>
+    <text class="empty-text">暂无课表安排</text>
+    <text class="empty-hint">点击上方"添加课程"创建课表</text>
+  </view>
+
+  <view class="modal-mask" wx:if="{{showModal}}" bindtap="hideModal"></view>
+  <view class="modal" wx:if="{{showModal}}">
+    <view class="modal-title">{{isEdit ? '编辑课程' : '添加课程'}}</view>
+    <view class="form-item">
+      <text class="form-label">选择课程</text>
+      <picker mode="selector" range="{{courses}}" range-key="courseName" value="{{form.courseIndex}}" bindchange="onCourseChange">
+        <view class="form-picker">
+          <text>{{courses[form.courseIndex].courseName || '请选择课程'}}</text>
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <text class="form-label">星期</text>
+      <picker mode="selector" range="{{weekDayNames}}" value="{{form.dayOfWeek - 1}}" bindchange="onDayChange">
+        <view class="form-picker">
+          <text>{{weekDayNames[form.dayOfWeek - 1]}}</text>
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+    <view class="form-row">
+      <view class="form-item half">
+        <text class="form-label">开始时间</text>
+        <picker mode="time" value="{{form.startTime}}" bindchange="onStartTimeChange">
+          <view class="form-picker">
+            <text>{{form.startTime || '选择'}}</text>
+          </view>
+        </picker>
+      </view>
+      <view class="form-item half">
+        <text class="form-label">结束时间</text>
+        <picker mode="time" value="{{form.endTime}}" bindchange="onEndTimeChange">
+          <view class="form-picker">
+            <text>{{form.endTime || '选择'}}</text>
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="form-item">
+      <text class="form-label">上课地点</text>
+      <input class="form-input" placeholder="如：教学楼A301" value="{{form.location}}" bindinput="onLocationInput" />
+    </view>
+    <view class="form-row">
+      <view class="form-item half">
+        <text class="form-label">起始周</text>
+        <input class="form-input" type="number" placeholder="1" value="{{form.weekStart}}" bindinput="onWeekStartInput" />
+      </view>
+      <view class="form-item half">
+        <text class="form-label">结束周</text>
+        <input class="form-input" type="number" placeholder="16" value="{{form.weekEnd}}" bindinput="onWeekEndInput" />
+      </view>
+    </view>
+    <view class="modal-actions">
+      <view class="modal-btn cancel-btn" bindtap="hideModal">取消</view>
+      <view class="modal-btn confirm-btn" bindtap="submitSchedule">确定</view>
+    </view>
+  </view>
+</view>

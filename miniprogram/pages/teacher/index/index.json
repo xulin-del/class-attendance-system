@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "教师首页",
+  "navigationBarBackgroundColor": "#f7fbf8",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#f7fbf8",
+  "usingComponents": {
+    "line-chart": "/components/line-chart/line-chart"
+  }
+}

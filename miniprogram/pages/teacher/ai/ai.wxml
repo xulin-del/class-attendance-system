@@ -1,0 +1,84 @@
+<view class="container">
+  <!-- 顶部标题 -->
+  <view class="header">
+    <view class="header-icon">AI</view>
+    <text class="header-title">考勤智能助手</text>
+    <text class="header-desc">用自然语言查询考勤信息</text>
+  </view>
+
+  <!-- 推荐问题 -->
+  <view class="suggestions" wx:if="{{!answer && !loading}}">
+    <text class="section-title">试试这样问：</text>
+    <view class="suggestion-list">
+      <view class="suggestion-item" bindtap="useSuggestion" data-question="计算机2301班今天的考勤情况如何？">
+        计算机2301班今天的考勤情况如何？
+      </view>
+      <view class="suggestion-item" bindtap="useSuggestion" data-question="这周有哪些学生缺勤？">
+        这周有哪些学生缺勤？
+      </view>
+      <view class="suggestion-item" bindtap="useSuggestion" data-question="帮我统计一下各班的考勤率">
+        帮我统计一下各班的考勤率
+      </view>
+    </view>
+  </view>
+
+  <!-- 回答区域 -->
+  <view class="answer-area" wx:if="{{answer || loading}}">
+    <view class="answer-card">
+      <view class="answer-header">
+        <view class="answer-avatar">AI</view>
+        <text class="answer-name">智能助手</text>
+      </view>
+      <view class="answer-content" wx:if="{{!loading}}">
+        <text>{{answer}}</text>
+      </view>
+      <view class="answer-loading" wx:if="{{loading}}">
+        <view class="loading-dots">
+          <view class="dot"></view>
+          <view class="dot"></view>
+          <view class="dot"></view>
+        </view>
+        <text class="loading-text">正在思考中...</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史记录 -->
+  <view class="history" wx:if="{{history.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">历史记录</text>
+      <text class="clear-btn" bindtap="clearHistory">清空</text>
+    </view>
+    <view class="history-list">
+      <view class="history-item" wx:for="{{history}}" wx:key="index">
+        <view class="history-question">
+          <text class="history-icon">Q</text>
+          <text class="history-text">{{item.question}}</text>
+        </view>
+        <view class="history-answer">
+          <text class="history-icon history-icon-a">A</text>
+          <text class="history-text">{{item.answer}}</text>
+        </view>
+        <text class="history-time">{{item.time}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部输入区 -->
+  <view class="input-area">
+    <view class="input-wrapper">
+      <input
+        class="question-input"
+        placeholder="输入考勤相关问题..."
+        value="{{question}}"
+        bindinput="onInputChange"
+        bindconfirm="submitQuestion"
+        confirm-type="send"
+        disabled="{{loading}}"
+      />
+      <view class="send-btn {{loading ? 'disabled' : ''}}" bindtap="submitQuestion">
+        <text>{{loading ? '...' : '发送'}}</text>
+      </view>
+    </view>
+  </view>
+</view>

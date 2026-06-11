@@ -1,0 +1,52 @@
+<view class="page-container">
+  <view class="header">
+    <text class="title">输入数字口令</text>
+    <text class="subtitle">请输入老师告知的4位数字口令</text>
+  </view>
+
+  <view class="input-area">
+    <view class="input-boxes">
+      <view class="input-box {{inputValue.length > 0 ? 'filled' : ''}}">
+        <text class="input-digit">{{inputValue[0] || ''}}</text>
+      </view>
+      <view class="input-box {{inputValue.length > 1 ? 'filled' : ''}}">
+        <text class="input-digit">{{inputValue[1] || ''}}</text>
+      </view>
+      <view class="input-box {{inputValue.length > 2 ? 'filled' : ''}}">
+        <text class="input-digit">{{inputValue[2] || ''}}</text>
+      </view>
+      <view class="input-box {{inputValue.length > 3 ? 'filled' : ''}}">
+        <text class="input-digit">{{inputValue[3] || ''}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="keyboard">
+    <view class="keyboard-row">
+      <view class="key" bindtap="inputDigit" data-digit="1">1</view>
+      <view class="key" bindtap="inputDigit" data-digit="2">2</view>
+      <view class="key" bindtap="inputDigit" data-digit="3">3</view>
+    </view>
+    <view class="keyboard-row">
+      <view class="key" bindtap="inputDigit" data-digit="4">4</view>
+      <view class="key" bindtap="inputDigit" data-digit="5">5</view>
+      <view class="key" bindtap="inputDigit" data-digit="6">6</view>
+    </view>
+    <view class="keyboard-row">
+      <view class="key" bindtap="inputDigit" data-digit="7">7</view>
+      <view class="key" bindtap="inputDigit" data-digit="8">8</view>
+      <view class="key" bindtap="inputDigit" data-digit="9">9</view>
+    </view>
+    <view class="keyboard-row">
+      <view class="key empty"></view>
+      <view class="key" bindtap="inputDigit" data-digit="0">0</view>
+      <view class="key delete" bindtap="deleteDigit">
+        <text class="delete-icon">⌫</text>
+      </view>
+    </view>
+  </view>
+
+  <button class="submit-btn" bindtap="submitSignIn" disabled="{{inputValue.length !== 4 || submitting}}">
+    {{submitting ? '签到中...' : '确认签到'}}
+  </button>
+</view>

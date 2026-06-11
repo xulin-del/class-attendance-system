@@ -1,0 +1,8 @@
+.chart-container {
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.chart-canvas {
+  width: 100%;
+}

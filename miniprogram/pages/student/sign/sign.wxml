@@ -1,0 +1,106 @@
+<view class="page-container">
+  <view class="header">
+    <text class="title">签到中心</text>
+  </view>
+  
+  <view class="content">
+    <view class="section">
+      <view class="section-title">签到方式</view>
+      <view class="sign-types">
+        <view class="sign-type {{signType === 'qrcode' ? 'active' : ''}}" bindtap="selectSignType" data-type="qrcode">
+          <text class="type-icon">📱</text>
+          <text class="type-name">扫码签到</text>
+        </view>
+        <view class="sign-type {{signType === 'location' ? 'active' : ''}}" bindtap="selectSignType" data-type="location">
+          <text class="type-icon">📍</text>
+          <text class="type-name">定位签到</text>
+        </view>
+        <view class="sign-type {{signType === 'digital' ? 'active' : ''}}" bindtap="selectSignType" data-type="digital">
+          <text class="type-icon">🔢</text>
+          <text class="type-name">数字签到</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="sign-area" wx:if="{{signType === 'qrcode'}}">
+      <view class="sign-box">
+        <button class="scan-btn" bindtap="scanQRCode">
+          <text class="btn-icon">📷</text>
+          <text class="btn-text">扫描二维码签到</text>
+        </button>
+        
+        <view class="code-divider">
+          <view class="divider-line"></view>
+          <text class="divider-text">或手动输入签到码</text>
+          <view class="divider-line"></view>
+        </view>
+        
+        <view class="code-input-area">
+          <input class="code-input" placeholder="请输入签到码（如 ATT_1_382746）" value="{{signCode}}" bindinput="onSignCodeInput" />
+          <button class="code-submit-btn" bindtap="submitSignCode">签到</button>
+        </view>
+      </view>
+    </view>
+    
+    <view class="sign-area" wx:if="{{signType === 'location'}}">
+      <view class="section">
+        <view class="section-title">选择课程</view>
+        <picker mode="selector" range="{{courses}}" range-key="courseName" bindchange="onCourseChange">
+          <view class="picker">
+            <text class="picker-text">{{selectedCourse ? selectedCourse.courseName : '请选择课程'}}</text>
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+      
+      <view class="sign-box">
+        <view class="location-info" wx:if="{{currentLocation}}">
+          <text class="location-label">当前位置</text>
+          <text class="location-value">{{currentLocation}}</text>
+        </view>
+        <button class="location-btn" bindtap="locationSignIn">
+          <text class="btn-icon">📍</text>
+          <text class="btn-text">立即签到</text>
+        </button>
+      </view>
+    </view>
+
+    <view class="sign-area" wx:if="{{signType === 'digital'}}">
+      <view class="sign-box digital-sign-box">
+        <text class="digital-desc">老师会告知一个4位数字口令</text>
+        <text class="digital-desc">输入正确口令即可完成签到</text>
+        <button class="digital-btn" bindtap="goToDigitalSign">
+          <text class="btn-icon">🔢</text>
+          <text class="btn-text">输入口令签到</text>
+        </button>
+      </view>
+    </view>
+    
+    <view class="tips">
+      <text class="tip-title">签到说明</text>
+      <text class="tip-item">• 扫码签到: 扫描教师展示的二维码，系统自动识别课程完成签到</text>
+      <text class="tip-item">• 手动输入: 输入教师展示的签到码完成签到</text>
+      <text class="tip-item">• 定位签到: 选择课程后，在教师设定的范围内点击"立即签到"，系统将自动校验距离</text>
+      <text class="tip-item">• 数字签到: 输入老师告知的4位数字口令完成签到，口令60秒内有效</text>
+    </view>
+  </view>
+  
+  <view class="tabbar">
+    <view class="tabbar-item" bindtap="switchTab" data-index="0">
+      <text class="tabbar-icon">🏠</text>
+      <text class="tabbar-text">首页</text>
+    </view>
+    <view class="tabbar-item active" bindtap="switchTab" data-index="1">
+      <text class="tabbar-icon">✅</text>
+      <text class="tabbar-text">签到中心</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="2">
+      <text class="tabbar-icon">📋</text>
+      <text class="tabbar-text">我的考勤</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="3">
+      <text class="tabbar-icon">👤</text>
+      <text class="tabbar-text">我的</text>
+    </view>
+  </view>
+</view>

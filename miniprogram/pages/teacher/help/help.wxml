@@ -1,0 +1,70 @@
+<view class="page-container">
+  <view class="help-section">
+    <view class="section-title">一、课程管理</view>
+    <view class="help-item">
+      <text class="help-text">1. 在"课程管理"页面可以添加、编辑和删除课程。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">2. 每门课程需要设置课程名称和所属班级。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">3. 在"我的课表"中可以为课程设置上课时间和地点。</text>
+    </view>
+  </view>
+
+  <view class="help-section">
+    <view class="section-title">二、发起签到</view>
+    <view class="help-item">
+      <text class="help-text">1. 选择课程后点击"发起签到"按钮。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">2. 支持三种签到方式：签到码签到、定位签到、数字口令签到。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">3. 签到码有效期为30分钟，超时需重新发起。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">4. 定位签到需设置签到地点和有效范围。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">5. 数字口令有效期为60秒，学生需在有效期内输入。</text>
+    </view>
+  </view>
+
+  <view class="help-section">
+    <view class="section-title">三、考勤统计</view>
+    <view class="help-item">
+      <text class="help-text">1. 可以查看本周出勤人数统计图表。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">2. 在"签到记录"中可以按日期查看详细签到情况。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">3. 支持导出月度考勤报表。</text>
+    </view>
+  </view>
+
+  <view class="help-section">
+    <view class="section-title">四、花名册</view>
+    <view class="help-item">
+      <text class="help-text">1. 可以查看班级学生列表。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">2. 支持按班级筛选学生。</text>
+    </view>
+  </view>
+
+  <view class="help-section">
+    <view class="section-title">五、上课提醒</view>
+    <view class="help-item">
+      <text class="help-text">1. 学生订阅课程提醒后，系统会在上课前5分钟自动推送提醒。</text>
+    </view>
+    <view class="help-item">
+      <text class="help-text">2. 需要在课表中设置正确的上课时间。</text>
+    </view>
+  </view>
+
+  <view class="contact-section">
+    <text class="contact-text">如有其他问题，请联系系统管理员</text>
+  </view>
+</view>

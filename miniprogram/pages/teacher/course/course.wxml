@@ -1,0 +1,80 @@
+<view class="page-container">
+  <view class="header">
+    <text class="title">我的课程</text>
+    <view class="add-btn" bindtap="showAddModal">
+      <text class="add-text">+ 添加课程</text>
+    </view>
+  </view>
+  
+  <view class="course-list">
+    <view class="course-card" wx:for="{{courses}}" wx:key="courseId">
+      <view class="course-header">
+        <text class="course-name">{{item.courseName}}</text>
+        <view class="course-actions">
+          <text class="action-btn edit" bindtap="editCourse" data-course="{{item}}">编辑</text>
+          <text class="action-btn delete" bindtap="deleteCourse" data-id="{{item.courseId}}">删除</text>
+        </view>
+      </view>
+      <view class="course-body">
+        <view class="info-item">
+          <text class="info-label">班级:</text>
+          <text class="info-value">{{item.className}}</text>
+        </view>
+        <view class="info-item">
+          <text class="info-label">课程ID:</text>
+          <text class="info-value">{{item.courseId}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="empty" wx:if="{{courses.length === 0}}">
+      <text class="empty-text">暂无课程，点击上方添加</text>
+    </view>
+  </view>
+  
+  <view class="modal" wx:if="{{showModal}}">
+    <view class="modal-mask" bindtap="hideModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{isEdit ? '编辑课程' : '添加课程'}}</text>
+      </view>
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">课程名称</text>
+          <input class="form-input" placeholder="请输入课程名称" value="{{formData.courseName}}" bindinput="onCourseNameInput" />
+        </view>
+        <view class="form-item">
+          <text class="form-label">班级名称</text>
+          <input class="form-input" placeholder="请输入班级名称" value="{{formData.className}}" bindinput="onClassNameInput" />
+        </view>
+      </view>
+      <view class="modal-footer">
+        <view class="btn cancel" bindtap="hideModal">取消</view>
+        <view class="btn confirm" bindtap="submitCourse">确定</view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="tabbar">
+    <view class="tabbar-item" bindtap="switchTab" data-index="0">
+      <text class="tabbar-icon">🏠</text>
+      <text class="tabbar-text">首页</text>
+    </view>
+    <view class="tabbar-item active" bindtap="switchTab" data-index="1">
+      <text class="tabbar-icon">📚</text>
+      <text class="tabbar-text">课程管理</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="2">
+      <text class="tabbar-icon">✅</text>
+      <text class="tabbar-text">发起签到</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="3">
+      <text class="tabbar-icon">📊</text>
+      <text class="tabbar-text">考勤统计</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="4">
+      <text class="tabbar-icon">👤</text>
+      <text class="tabbar-text">我的</text>
+    </view>
+  </view>
+</view>

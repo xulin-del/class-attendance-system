@@ -1,0 +1,179 @@
+.page-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20rpx;
+}
+
+.filter-bar {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.date-text {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.picker-arrow {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.stats-bar {
+  display: flex;
+  justify-content: space-around;
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 0;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.stats-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stats-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.signed-color {
+  color: #52c41a;
+}
+
+.absent-color {
+  color: #ff4d4f;
+}
+
+.unsigned-color {
+  color: #faad14;
+}
+
+.stats-label {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.record-list {
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.course-group {
+  margin-bottom: 10rpx;
+}
+
+.course-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 30rpx;
+  background-color: #fafafa;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.course-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.course-class {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 30rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.record-name {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 4rpx;
+}
+
+.record-id {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.record-status {
+  padding: 6rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+.status-signed {
+  background-color: #f6ffed;
+}
+
+.status-absent {
+  background-color: #fff2f0;
+}
+
+.status-unsigned {
+  background-color: #fffbe6;
+}
+
+.status-text {
+  font-size: 24rpx;
+}
+
+.status-signed .status-text {
+  color: #52c41a;
+}
+
+.status-absent .status-text {
+  color: #ff4d4f;
+}
+
+.status-unsigned .status-text {
+  color: #faad14;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}

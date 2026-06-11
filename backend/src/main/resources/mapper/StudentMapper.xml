@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.attendance.mapper.StudentMapper">
+    <select id="selectByStudentId" resultType="com.attendance.entity.Student">
+        SELECT student_id AS studentId, student_name AS studentName, class_name AS className, openid, password, phone
+        FROM students 
+        WHERE student_id = #{studentId}
+    </select>
+    <select id="selectByStudentIdAndName" resultType="com.attendance.entity.Student">
+        SELECT student_id AS studentId, student_name AS studentName, class_name AS className, openid, password, phone
+        FROM students 
+        WHERE student_id = #{studentId} AND student_name = #{studentName}
+    </select>
+    <select id="selectByStudentIdAndPhone" resultType="com.attendance.entity.Student">
+        SELECT student_id AS studentId, student_name AS studentName, class_name AS className, openid, password, phone
+        FROM students
+        WHERE student_id = #{studentId} AND phone = #{phone}
+    </select>
+    <select id="selectByClassName" resultType="com.attendance.entity.Student">
+        SELECT student_id AS studentId, student_name AS studentName, class_name AS className, openid, password, phone
+        FROM students 
+        WHERE class_name = #{className}
+    </select>
+</mapper>

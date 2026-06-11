@@ -1,0 +1,34 @@
+<view class="page-container">
+  <view class="class-selector" wx:if="{{courses.length > 1}}">
+    <picker mode="selector" range="{{classNames}}" value="{{classIndex}}" bindchange="onClassChange">
+      <view class="picker-value">
+        <text>{{classNames[classIndex]}}</text>
+        <text class="picker-arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+
+  <view class="summary">
+    <text class="summary-text">共 {{students.length}} 名学生</text>
+  </view>
+
+  <view class="student-list" wx:if="{{students.length > 0}}">
+    <view class="student-item" wx:for="{{students}}" wx:key="studentId">
+      <view class="student-avatar">
+        <text class="avatar-text">{{item.studentName[0]}}</text>
+      </view>
+      <view class="student-info">
+        <text class="student-name">{{item.studentName}}</text>
+        <text class="student-id">学号: {{item.studentId}}</text>
+      </view>
+      <view class="student-class-tag">
+        <text class="tag-text">{{item.className}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:else>
+    <text class="empty-icon">📭</text>
+    <text class="empty-text">该班级暂无学生</text>
+  </view>
+</view>

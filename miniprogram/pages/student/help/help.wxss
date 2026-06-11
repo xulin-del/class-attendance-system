@@ -1,0 +1,41 @@
+.page-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20rpx;
+}
+
+.help-section {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #2E7D32;
+  margin-bottom: 20rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 2rpx solid #E8F5E9;
+}
+
+.help-item {
+  padding: 16rpx 0;
+}
+
+.help-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.contact-section {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.contact-text {
+  font-size: 26rpx;
+  color: #999;
+}

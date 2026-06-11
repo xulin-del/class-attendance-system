@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.attendance.mapper.SignReminderMapper">
+    <select id="selectPendingByClassName" resultType="com.attendance.entity.SignReminder">
+        SELECT id, course_id AS courseId, course_name AS courseName, class_name AS className,
+               sign_code AS signCode, teacher_id AS teacherId, status, create_time AS createTime,
+               COALESCE(reminder_type, 'sign') AS reminderType, schedule_id AS scheduleId,
+               reminder_date AS reminderDate, expire_time AS expireTime
+        FROM sign_reminders
+        WHERE class_name = #{className} AND status = 'pending'
+        <if test="className != null">
+            AND (expire_time IS NULL OR expire_time > NOW())
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectPendingByStudentId" resultType="com.attendance.entity.SignReminder">
+        SELECT r.id, r.course_id AS courseId, r.course_name AS courseName, r.class_name AS className,
+               r.sign_code AS signCode, r.teacher_id AS teacherId, r.status, r.create_time AS createTime,
+               COALESCE(r.reminder_type, 'sign') AS reminderType, r.schedule_id AS scheduleId,
+               r.reminder_date AS reminderDate, r.expire_time AS expireTime,
+               s.start_time AS startTime, s.end_time AS endTime, s.location AS location,
+               t.teacher_name AS teacherName
+        FROM sign_reminders r
+        INNER JOIN students stu ON stu.class_name = r.class_name
+        LEFT JOIN schedules s ON r.schedule_id = s.id
+        LEFT JOIN teachers t ON r.teacher_id = t.teacher_id
+        WHERE stu.student_id = #{studentId} AND r.status = 'pending'
+        AND (r.expire_time IS NULL OR r.expire_time > NOW())
+        ORDER BY CASE WHEN COALESCE(r.reminder_type, 'sign') = 'class' THEN 0 ELSE 1 END,
+                 r.create_time DESC
+    </select>
+
+    <select id="countClassReminder" resultType="int">
+        SELECT COUNT(*)
+        FROM sign_reminders
+        WHERE reminder_type = 'class'
+          AND schedule_id = #{scheduleId}
+          AND reminder_date = #{reminderDate}
+    </select>
+
+    <update id="updateStatusById">
+        UPDATE sign_reminders
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+</mapper>

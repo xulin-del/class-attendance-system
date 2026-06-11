@@ -1,0 +1,164 @@
+<view class="page-container">
+  <view class="header">
+    <text class="title">发起签到</text>
+  </view>
+  
+  <view class="content">
+    <view class="section">
+      <view class="section-title">选择课程</view>
+      <picker mode="selector" range="{{courses}}" range-key="courseName" bindchange="onCourseChange">
+        <view class="picker">
+          <text class="picker-text">{{selectedCourse ? selectedCourse.courseName : '请选择课程'}}</text>
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+    
+    <view class="section" wx:if="{{selectedCourse}}">
+      <view class="section-title">签到方式</view>
+      <view class="sign-types">
+        <view class="sign-type {{signType === 'qrcode' ? 'active' : ''}}" bindtap="selectSignType" data-type="qrcode">
+          <text class="type-icon">📱</text>
+          <text class="type-name">扫码签到</text>
+        </view>
+        <view class="sign-type {{signType === 'location' ? 'active' : ''}}" bindtap="selectSignType" data-type="location">
+          <text class="type-icon">📍</text>
+          <text class="type-name">定位签到</text>
+        </view>
+        <view class="sign-type {{signType === 'digital' ? 'active' : ''}}" bindtap="selectSignType" data-type="digital">
+          <text class="type-icon">🔢</text>
+          <text class="type-name">数字口令</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="section" wx:if="{{selectedCourse && signType === 'qrcode' && !isQRCodeSigning}}">
+      <view class="section-title">签到时长</view>
+      <view class="duration-options">
+        <view class="duration-item {{duration === 5 ? 'active' : ''}}" bindtap="selectDuration" data-duration="5">5分钟</view>
+        <view class="duration-item {{duration === 10 ? 'active' : ''}}" bindtap="selectDuration" data-duration="10">10分钟</view>
+      </view>
+    </view>
+
+    <view class="section" wx:if="{{selectedCourse && signType === 'location' && !isLocationSigning}}">
+      <view class="section-title">有效半径</view>
+      <view class="radius-setting">
+        <input class="radius-input" type="number" value="{{locationRadius}}" bindinput="onRadiusInput" />
+        <text class="radius-unit">米</text>
+      </view>
+      <text class="radius-hint">学生在此范围内才能签到成功</text>
+    </view>
+    
+    <button class="start-btn" wx:if="{{selectedCourse && signType === 'qrcode' && !isQRCodeSigning}}" bindtap="startSign">发起签到</button>
+    <button class="start-btn" wx:if="{{selectedCourse && signType === 'location' && !isLocationSigning}}" bindtap="startSign">发起签到</button>
+    <button class="start-btn" wx:if="{{selectedCourse && signType === 'digital' && !isDigitalSigning}}" bindtap="startDigitalSign">生成口令</button>
+    
+    <view class="signing-area" wx:if="{{signType === 'qrcode' && isQRCodeSigning}}">
+      <view class="qrcode-box">
+        <view class="qrcode-image-wrapper">
+          <canvas type="2d" id="qrcodeCanvas" class="qrcode-canvas"></canvas>
+        </view>
+        <view class="sign-code-info">
+          <text class="sign-code-label">签到码</text>
+          <text class="sign-code-value">{{qrcodeSignCode}}</text>
+        </view>
+        <text class="countdown">剩余时间: {{qrcodeCountdown}}秒</text>
+      </view>
+      
+      <view class="sign-stats">
+        <view class="stat-item">
+          <text class="stat-value">{{qrcodeSignedCount}}</text>
+          <text class="stat-label">已签到</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{qrcodeUnsignedCount}}</text>
+          <text class="stat-label">未签到</text>
+        </view>
+      </view>
+      
+      <button class="end-btn" bindtap="endQRCodeSign">结束签到</button>
+    </view>
+    
+    <view class="signing-area" wx:if="{{signType === 'location' && isLocationSigning}}">
+      <view class="location-box">
+        <view class="location-info-card">
+          <view class="location-info-row">
+            <text class="location-icon">📍</text>
+            <view class="location-info-text">
+              <text class="location-label">签到中心点</text>
+              <text class="location-value">{{teacherLocation}}</text>
+            </view>
+          </view>
+          <view class="location-info-row">
+            <text class="location-icon">📏</text>
+            <view class="location-info-text">
+              <text class="location-label">有效半径</text>
+              <text class="location-value">{{locationRadius}}米</text>
+            </view>
+          </view>
+        </view>
+        <text class="countdown">剩余时间: {{locationCountdown}}秒</text>
+      </view>
+      
+      <view class="sign-stats">
+        <view class="stat-item">
+          <text class="stat-value">{{locationSignedCount}}</text>
+          <text class="stat-label">已签到</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{locationUnsignedCount}}</text>
+          <text class="stat-label">未签到</text>
+        </view>
+      </view>
+      
+      <button class="end-btn" bindtap="endLocationSign">结束签到</button>
+    </view>
+
+    <view class="signing-area" wx:if="{{signType === 'digital' && isDigitalSigning}}">
+      <view class="digital-box">
+        <text class="digital-label">数字口令</text>
+        <view class="digital-token">
+          <text class="token-digit" wx:for="{{digitalToken}}" wx:key="index">{{item}}</text>
+        </view>
+        <text class="countdown">剩余时间: {{digitalCountdown}}秒</text>
+        <text class="digital-hint">请告知学生此口令进行签到</text>
+      </view>
+      
+      <view class="sign-stats">
+        <view class="stat-item">
+          <text class="stat-value">{{digitalSignedCount}}</text>
+          <text class="stat-label">已签到</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{digitalUnsignedCount}}</text>
+          <text class="stat-label">未签到</text>
+        </view>
+      </view>
+      
+      <button class="end-btn" bindtap="endDigitalSign">结束签到</button>
+    </view>
+  </view>
+  
+  <view class="tabbar">
+    <view class="tabbar-item" bindtap="switchTab" data-index="0">
+      <text class="tabbar-icon">🏠</text>
+      <text class="tabbar-text">首页</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="1">
+      <text class="tabbar-icon">📚</text>
+      <text class="tabbar-text">课程管理</text>
+    </view>
+    <view class="tabbar-item active" bindtap="switchTab" data-index="2">
+      <text class="tabbar-icon">✅</text>
+      <text class="tabbar-text">发起签到</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="3">
+      <text class="tabbar-icon">📊</text>
+      <text class="tabbar-text">考勤统计</text>
+    </view>
+    <view class="tabbar-item" bindtap="switchTab" data-index="4">
+      <text class="tabbar-icon">👤</text>
+      <text class="tabbar-text">我的</text>
+    </view>
+  </view>
+</view>

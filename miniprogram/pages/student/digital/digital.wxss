@@ -1,0 +1,137 @@
+.page-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: linear-gradient(135deg, #1677FF, #69b1ff);
+  padding: 60rpx 40rpx;
+  text-align: center;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.subtitle {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.input-area {
+  background-color: #fff;
+  padding: 50rpx 40rpx;
+  margin: 30rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.input-boxes {
+  display: flex;
+  justify-content: center;
+  gap: 24rpx;
+}
+
+.input-box {
+  width: 120rpx;
+  height: 140rpx;
+  border: 4rpx solid #e0e0e0;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fafafa;
+  transition: all 0.2s;
+}
+
+.input-box.filled {
+  border-color: #1677FF;
+  background-color: #e6f4ff;
+}
+
+.input-digit {
+  font-size: 56rpx;
+  font-weight: bold;
+  color: #1677FF;
+}
+
+.keyboard {
+  background-color: #fff;
+  padding: 20rpx;
+  margin: 0 30rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.keyboard-row:last-child {
+  margin-bottom: 0;
+}
+
+.key {
+  width: 180rpx;
+  height: 100rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.15s;
+}
+
+.key:active {
+  background-color: #e0e0e0;
+  transform: scale(0.95);
+}
+
+.key.empty {
+  background-color: transparent;
+}
+
+.key.delete {
+  background-color: #ff4d4f;
+  color: #fff;
+}
+
+.key.delete:active {
+  background-color: #ff7875;
+}
+
+.delete-icon {
+  font-size: 36rpx;
+}
+
+.submit-btn {
+  margin: 40rpx 30rpx;
+  height: 96rpx;
+  background: linear-gradient(135deg, #1677FF, #69b1ff);
+  color: #fff;
+  font-size: 34rpx;
+  font-weight: 500;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: 0 4rpx 16rpx rgba(22, 119, 255, 0.3);
+}
+
+.submit-btn[disabled] {
+  background: #ccc;
+  box-shadow: none;
+}

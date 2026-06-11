@@ -1,0 +1,64 @@
+.page-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20rpx;
+}
+
+.settings-section {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 16rpx;
+  padding-top: 10rpx;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.setting-arrow {
+  font-size: 32rpx;
+  color: #ccc;
+}
+
+.picker-value {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.picker-arrow {
+  margin-left: 10rpx;
+  font-size: 32rpx;
+  color: #ccc;
+}
+
+.version-info {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.version-text {
+  font-size: 26rpx;
+  color: #999;
+}
