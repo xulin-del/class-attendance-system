@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS sign_reminders (
     reminder_date DATE,
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     expire_time DATETIME,
+    UNIQUE KEY uk_schedule_reminder_day (schedule_id, reminder_date, reminder_type),
+    UNIQUE KEY uk_sign_reminder_code (sign_code),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 

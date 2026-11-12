@@ -1,13 +1,14 @@
 package com.attendance.service;
 
 import com.attendance.entity.AttendanceRecord;
+import com.attendance.entity.Course;
 import com.attendance.entity.LocationSign;
 import com.attendance.entity.SignCode;
-import com.attendance.entity.Student;
 import com.attendance.mapper.AttendanceRecordMapper;
+import com.attendance.mapper.CourseMapper;
+import com.attendance.mapper.DigitalTokenMapper;
 import com.attendance.mapper.LocationSignMapper;
 import com.attendance.mapper.SignCodeMapper;
-import com.attendance.mapper.StudentMapper;
 import com.attendance.mapper.ScheduleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,34 +26,36 @@ public class AttendanceService {
     @Autowired
     private AttendanceRecordMapper attendanceRecordMapper;
     @Autowired
-    private StudentMapper studentMapper;
+    private CourseMapper courseMapper;
     @Autowired
     private LocationSignMapper locationSignMapper;
     @Autowired
     private SignCodeMapper signCodeMapper;
     @Autowired
+    private DigitalTokenMapper digitalTokenMapper;
+    @Autowired
     private ScheduleMapper scheduleMapper;
 
     @Transactional
     public StartResult startAttendance(Integer courseId, String className) {
-        signCodeMapper.expireByCourseId(courseId);
-
-        List<AttendanceRecord> existingRecords = attendanceRecordMapper.selectByCourseId(courseId);
-        for (AttendanceRecord record : existingRecords) {
-            attendanceRecordMapper.deleteById(record.getRecordId());
+        Course course = lockCourseForWrite(courseId);
+        if (course == null) {
+            throw new IllegalArgumentException("课程不存在");
         }
+        closePreviousSessions(courseId);
+        attendanceRecordMapper.deleteByCourseId(courseId);
 
-        List<Student> students = studentMapper.selectByClassName(className);
         Date now = new Date();
-        for (Student student : students) {
-            AttendanceRecord record = new AttendanceRecord();
-            record.setCourseId(courseId);
-            record.setStudentId(student.getStudentId());
-            record.setStatus("未签到");
-            record.setCreateTime(now);
-            attendanceRecordMapper.insert(record);
-        }
+        SignCode signCode = createSignCode(courseId, now);
+        String sessionKey = signSessionKey(signCode.getId());
+        attendanceRecordMapper.insertRoster(courseId, course.getClassName(), sessionKey, now);
 
+        StartResult sr = new StartResult();
+        sr.signCode = signCode.getSignCode();
+        return sr;
+    }
+
+    private SignCode createSignCode(Integer courseId, Date now) {
         String signCodeStr = generateSignCode(courseId);
         SignCode signCode = new SignCode();
         signCode.setSignCode(signCodeStr);
@@ -63,10 +66,7 @@ public class AttendanceService {
         cal.add(Calendar.MINUTE, 30);
         signCode.setExpireTime(cal.getTime());
         signCodeMapper.insert(signCode);
-
-        StartResult sr = new StartResult();
-        sr.signCode = signCodeStr;
-        return sr;
+        return signCode;
     }
 
     public static class StartResult {
@@ -81,22 +81,36 @@ public class AttendanceService {
 
     @Transactional
     public boolean signIn(Integer courseId, String studentId) {
-        AttendanceRecord record = attendanceRecordMapper.selectByCourseIdAndStudentId(courseId, studentId);
-        if (record != null && "未签到".equals(record.getStatus())) {
-            record.setStatus("已签到");
-            record.setSignTime(new Date());
-            return attendanceRecordMapper.updateById(record) > 0;
+        Course course = courseMapper.selectByIdForShare(courseId);
+        if (course == null) {
+            return false;
         }
-        return false;
+        SignCode signCode = signCodeMapper.selectActiveByCourseId(courseId);
+        return signCode != null && markSigned(signCode, studentId);
     }
 
     @Transactional
     public boolean signInByCode(String signCodeStr, String studentId) {
-        SignCode signCode = signCodeMapper.selectActiveBySignCode(signCodeStr);
-        if (signCode == null) {
+        SignCode initialSignCode = signCodeMapper.selectActiveBySignCode(signCodeStr);
+        if (initialSignCode == null) {
             return false;
         }
-        return signIn(signCode.getCourseId(), studentId);
+        Course course = courseMapper.selectByIdForShare(initialSignCode.getCourseId());
+        if (course == null) {
+            return false;
+        }
+        SignCode activeSignCode = signCodeMapper.selectActiveBySignCode(signCodeStr);
+        return activeSignCode != null && markSigned(activeSignCode, studentId);
+    }
+
+    private boolean markSigned(SignCode signCode, String studentId) {
+        return attendanceRecordMapper.markSignedBySession(
+                signSessionKey(signCode.getId()), studentId, new Date()
+        ) > 0;
+    }
+
+    private String signSessionKey(Integer signCodeId) {
+        return "SIGN:" + signCodeId;
     }
 
     public Integer getCourseIdBySignCode(String signCodeStr) {
@@ -117,16 +131,17 @@ public class AttendanceService {
 
     @Transactional
     public void endAttendance(Integer courseId) {
-        signCodeMapper.expireByCourseId(courseId);
-
-        List<AttendanceRecord> records = attendanceRecordMapper.selectByCourseId(courseId);
-        for (AttendanceRecord record : records) {
-            if ("未签到".equals(record.getStatus())) {
-                record.setStatus("缺勤");
-                attendanceRecordMapper.updateById(record);
-            }
+        Course course = lockCourseForWrite(courseId);
+        if (course == null) {
+            throw new IllegalArgumentException("课程不存在");
         }
+        closePreviousSessions(courseId);
+        attendanceRecordMapper.markUnsignedAsAbsent(courseId);
+    }
 
+    private void closePreviousSessions(Integer courseId) {
+        signCodeMapper.expireByCourseId(courseId);
+        digitalTokenMapper.expireByCourseId(courseId);
         LocationSign activeLocationSign = locationSignMapper.selectActiveByCourseId(courseId);
         if (activeLocationSign != null) {
             activeLocationSign.setStatus("已结束");
@@ -135,48 +150,27 @@ public class AttendanceService {
         }
     }
 
+    private Course lockCourseForWrite(Integer courseId) {
+        return courseMapper.selectByIdForUpdate(courseId);
+    }
+
     @Transactional
     public LocationSignResult startLocationAttendance(Integer courseId, String className, Double latitude, Double longitude, Integer radius) {
-        LocationSign existingSign = locationSignMapper.selectActiveByCourseId(courseId);
-        if (existingSign != null) {
-            existingSign.setStatus("已结束");
-            existingSign.setEndTime(new Date());
-            locationSignMapper.updateById(existingSign);
+        Course course = lockCourseForWrite(courseId);
+        if (course == null) {
+            throw new IllegalArgumentException("课程不存在");
         }
+        closePreviousSessions(courseId);
+        attendanceRecordMapper.deleteByCourseId(courseId);
 
-        signCodeMapper.expireByCourseId(courseId);
-
-        List<AttendanceRecord> existingRecords = attendanceRecordMapper.selectByCourseId(courseId);
-        for (AttendanceRecord record : existingRecords) {
-            attendanceRecordMapper.deleteById(record.getRecordId());
-        }
-
-        List<Student> students = studentMapper.selectByClassName(className);
         Date now = new Date();
-        for (Student student : students) {
-            AttendanceRecord record = new AttendanceRecord();
-            record.setCourseId(courseId);
-            record.setStudentId(student.getStudentId());
-            record.setStatus("未签到");
-            record.setCreateTime(now);
-            attendanceRecordMapper.insert(record);
-        }
-
-        String signCodeStr = generateSignCode(courseId);
-
-        SignCode signCode = new SignCode();
-        signCode.setSignCode(signCodeStr);
-        signCode.setCourseId(courseId);
-        signCode.setStatus("active");
-        signCode.setCreateTime(now);
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, 30);
-        signCode.setExpireTime(cal.getTime());
-        signCodeMapper.insert(signCode);
+        SignCode signCode = createSignCode(courseId, now);
+        String sessionKey = signSessionKey(signCode.getId());
+        attendanceRecordMapper.insertRoster(courseId, course.getClassName(), sessionKey, now);
 
         LocationSign locationSign = new LocationSign();
         locationSign.setCourseId(courseId);
-        locationSign.setSignCode(signCodeStr);
+        locationSign.setSignCode(signCode.getSignCode());
         locationSign.setLatitude(latitude);
         locationSign.setLongitude(longitude);
         locationSign.setRadius(radius);
@@ -185,7 +179,7 @@ public class AttendanceService {
         locationSignMapper.insert(locationSign);
 
         LocationSignResult result = new LocationSignResult();
-        result.signCode = signCodeStr;
+        result.signCode = signCode.getSignCode();
         result.latitude = latitude;
         result.longitude = longitude;
         result.radius = radius;
@@ -194,12 +188,18 @@ public class AttendanceService {
 
     @Transactional
     public LocationSignInResult signInByLocation(Integer courseId, String studentId, Double studentLat, Double studentLng) {
+        LocationSign initialLocationSign = locationSignMapper.selectActiveByCourseId(courseId);
+        if (initialLocationSign == null) {
+            return locationFailure("该课程暂无进行中的定位签到");
+        }
+        Course course = courseMapper.selectByIdForShare(courseId);
+        if (course == null) {
+            return locationFailure("课程不存在");
+        }
+
         LocationSign locationSign = locationSignMapper.selectActiveByCourseId(courseId);
         if (locationSign == null) {
-            LocationSignInResult result = new LocationSignInResult();
-            result.success = false;
-            result.message = "该课程暂无进行中的定位签到";
-            return result;
+            return locationFailure("该课程暂无进行中的定位签到");
         }
 
         double distance = calculateDistance(
@@ -207,37 +207,32 @@ public class AttendanceService {
             studentLat, studentLng
         );
 
-        if (distance <= locationSign.getRadius()) {
-            AttendanceRecord record = attendanceRecordMapper.selectByCourseIdAndStudentId(courseId, studentId);
-            if (record != null && "未签到".equals(record.getStatus())) {
-                record.setStatus("已签到");
-                record.setSignTime(new Date());
-                attendanceRecordMapper.updateById(record);
-
-                LocationSignInResult result = new LocationSignInResult();
-                result.success = true;
-                result.message = "签到成功";
-                result.distance = Math.round(distance * 100.0) / 100.0;
-                return result;
-            } else if (record != null && "已签到".equals(record.getStatus())) {
-                LocationSignInResult result = new LocationSignInResult();
-                result.success = false;
-                result.message = "你已经签到过了";
-                result.distance = Math.round(distance * 100.0) / 100.0;
-                return result;
-            } else {
-                LocationSignInResult result = new LocationSignInResult();
-                result.success = false;
-                result.message = "签到失败，不在签到名单中";
-                return result;
-            }
-        } else {
+        if (distance > locationSign.getRadius()) {
             LocationSignInResult result = new LocationSignInResult();
             result.success = false;
             result.message = "距离太远，无法签到（当前距离" + Math.round(distance) + "米，有效范围" + locationSign.getRadius() + "米）";
             result.distance = Math.round(distance * 100.0) / 100.0;
             return result;
         }
+
+        SignCode signCode = signCodeMapper.selectActiveBySignCode(locationSign.getSignCode());
+        if (signCode == null || !courseId.equals(signCode.getCourseId())) {
+            return locationFailure("签到已结束");
+        }
+
+        boolean signed = markSigned(signCode, studentId);
+        LocationSignInResult result = new LocationSignInResult();
+        result.success = signed;
+        result.message = signed ? "签到成功" : "签到失败，可能已经签到或不在签到名单中";
+        result.distance = Math.round(distance * 100.0) / 100.0;
+        return result;
+    }
+
+    private LocationSignInResult locationFailure(String message) {
+        LocationSignInResult result = new LocationSignInResult();
+        result.success = false;
+        result.message = message;
+        return result;
     }
 
     private double calculateDistance(double lat1, double lng1, double lat2, double lng2) {

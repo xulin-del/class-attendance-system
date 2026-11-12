@@ -1,18 +1,19 @@
 package com.attendance.service;
 
-import com.attendance.entity.AttendanceRecord;
+import com.attendance.entity.Course;
 import com.attendance.entity.DigitalToken;
-import com.attendance.entity.Student;
+import com.attendance.entity.LocationSign;
 import com.attendance.mapper.AttendanceRecordMapper;
+import com.attendance.mapper.CourseMapper;
 import com.attendance.mapper.DigitalTokenMapper;
-import com.attendance.mapper.StudentMapper;
+import com.attendance.mapper.LocationSignMapper;
+import com.attendance.mapper.SignCodeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class DigitalTokenService {
@@ -21,12 +22,28 @@ public class DigitalTokenService {
     @Autowired
     private AttendanceRecordMapper attendanceRecordMapper;
     @Autowired
-    private StudentMapper studentMapper;
+    private CourseMapper courseMapper;
+    @Autowired
+    private SignCodeMapper signCodeMapper;
+    @Autowired
+    private LocationSignMapper locationSignMapper;
 
-    private static final ConcurrentHashMap<String, Long> recentSubmissions = new ConcurrentHashMap<>();
-
+    @Transactional
     public DigitalToken generateToken(Integer courseId, String teacherId, int expireSeconds) {
+        Course course = courseMapper.selectByIdForUpdate(courseId);
+        if (course == null) {
+            throw new IllegalArgumentException("课程不存在");
+        }
+
+        signCodeMapper.expireByCourseId(courseId);
         digitalTokenMapper.expireByCourseId(courseId);
+        LocationSign activeLocationSign = locationSignMapper.selectActiveByCourseId(courseId);
+        if (activeLocationSign != null) {
+            activeLocationSign.setStatus("已结束");
+            activeLocationSign.setEndTime(new Date());
+            locationSignMapper.updateById(activeLocationSign);
+        }
+        attendanceRecordMapper.deleteByCourseId(courseId);
 
         String token = generateRandomToken();
         
@@ -41,6 +58,12 @@ public class DigitalTokenService {
         digitalToken.setExpireTime(cal.getTime());
         
         digitalTokenMapper.insert(digitalToken);
+        attendanceRecordMapper.insertRoster(
+                courseId,
+                course.getClassName(),
+                tokenSessionKey(digitalToken.getId()),
+                new Date()
+        );
         return digitalToken;
     }
 
@@ -56,65 +79,51 @@ public class DigitalTokenService {
 
     @Transactional
     public DigitalSignInResult signInByToken(String token, String studentId) {
-        String key = studentId + "_" + token;
-        long now = System.currentTimeMillis();
-        Long lastTime = recentSubmissions.get(key);
-        if (lastTime != null && now - lastTime < 60000) {
-            DigitalSignInResult result = new DigitalSignInResult();
-            result.success = false;
-            result.message = "请勿重复提交";
-            return result;
-        }
-
-        DigitalToken digitalToken = digitalTokenMapper.selectByToken(token);
-        if (digitalToken == null) {
+        DigitalToken initialToken = digitalTokenMapper.selectByToken(token);
+        if (initialToken == null) {
             DigitalSignInResult result = new DigitalSignInResult();
             result.success = false;
             result.message = "口令无效或已过期";
             return result;
         }
 
-        Integer courseId = digitalToken.getCourseId();
-        AttendanceRecord record = attendanceRecordMapper.selectByCourseIdAndStudentId(courseId, studentId);
-        
-        if (record == null) {
-            Student student = studentMapper.selectByStudentId(studentId);
-            if (student == null) {
-                DigitalSignInResult result = new DigitalSignInResult();
-                result.success = false;
-                result.message = "学生信息不存在";
-                return result;
-            }
-            record = new AttendanceRecord();
-            record.setCourseId(courseId);
-            record.setStudentId(studentId);
-            record.setStatus("已签到");
-            record.setSignTime(new Date());
-            record.setCreateTime(new Date());
-            attendanceRecordMapper.insert(record);
-        } else if ("已签到".equals(record.getStatus())) {
+        Integer courseId = initialToken.getCourseId();
+        Course course = courseMapper.selectByIdForShare(courseId);
+        if (course == null) {
             DigitalSignInResult result = new DigitalSignInResult();
             result.success = false;
-            result.message = "你已经签到过了";
-            result.courseId = courseId;
+            result.message = "课程不存在";
             return result;
-        } else {
-            record.setStatus("已签到");
-            record.setSignTime(new Date());
-            attendanceRecordMapper.updateById(record);
         }
 
-        recentSubmissions.put(key, now);
+        DigitalToken activeToken = digitalTokenMapper.selectByToken(token);
+        if (activeToken == null || !courseId.equals(activeToken.getCourseId())) {
+            DigitalSignInResult result = new DigitalSignInResult();
+            result.success = false;
+            result.message = "口令无效或已过期";
+            return result;
+        }
 
+        boolean signed = attendanceRecordMapper.markSignedBySession(
+                tokenSessionKey(activeToken.getId()), studentId, new Date()
+        ) > 0;
         DigitalSignInResult result = new DigitalSignInResult();
-        result.success = true;
-        result.message = "签到成功";
+        result.success = signed;
+        result.message = signed ? "签到成功" : "签到失败，可能已经签到或不在签到名单中";
         result.courseId = courseId;
         return result;
     }
 
+    @Transactional
     public void expireToken(Integer courseId) {
+        if (courseMapper.selectByIdForUpdate(courseId) == null) {
+            return;
+        }
         digitalTokenMapper.expireByCourseId(courseId);
+    }
+
+    private String tokenSessionKey(Integer tokenId) {
+        return "TOKEN:" + tokenId;
     }
 
     public static class DigitalSignInResult {

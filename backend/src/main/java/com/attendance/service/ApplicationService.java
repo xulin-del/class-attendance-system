@@ -17,14 +17,19 @@ public class ApplicationService {
     @Autowired
     private AttendanceRecordMapper recordMapper;
 
+    @Transactional
     public ApplicationResult submitApplication(Integer recordId, Integer courseId, String studentId, 
             String courseName, Date absenceDate, String reason, String images) {
+        AttendanceRecord lockedRecord = recordMapper.selectByIdForUpdate(recordId);
+        if (lockedRecord == null
+                || !courseId.equals(lockedRecord.getCourseId())
+                || !studentId.equals(lockedRecord.getStudentId())) {
+            return result(false, "考勤记录不存在或不属于当前学生");
+        }
+
         AttendanceApplication existing = applicationMapper.selectByRecordId(recordId);
         if (existing != null) {
-            ApplicationResult result = new ApplicationResult();
-            result.success = false;
-            result.message = "该缺勤记录已提交过申请";
-            return result;
+            return result(false, "该缺勤记录已提交过申请");
         }
         
         AttendanceApplication app = new AttendanceApplication();
@@ -37,13 +42,12 @@ public class ApplicationService {
         app.setImages(images);
         app.setStatus("pending");
         app.setCreateTime(new Date());
+        app.setUpdateTime(new Date());
         
-        applicationMapper.insert(app);
-        
-        ApplicationResult result = new ApplicationResult();
-        result.success = true;
-        result.message = "申请提交成功";
-        return result;
+        if (applicationMapper.insertIfAbsent(app) == 0) {
+            return result(false, "该缺勤记录已提交过申请");
+        }
+        return result(true, "申请提交成功");
     }
 
     public List<AttendanceApplication> getPendingApplications(String teacherId) {
@@ -58,22 +62,15 @@ public class ApplicationService {
     public ApplicationResult approveApplication(Integer applicationId) {
         AttendanceApplication app = applicationMapper.selectById(applicationId);
         if (app == null) {
-            ApplicationResult result = new ApplicationResult();
-            result.success = false;
-            result.message = "申请不存在";
-            return result;
+            return result(false, "申请不存在");
         }
-        
-        if (!"pending".equals(app.getStatus())) {
-            ApplicationResult result = new ApplicationResult();
-            result.success = false;
-            result.message = "该申请已处理";
-            return result;
+
+        int updated = applicationMapper.updateStatusIfPending(
+                applicationId, "approved", app.getRejectReason(), new Date()
+        );
+        if (updated == 0) {
+            return result(false, "该申请已处理");
         }
-        
-        app.setStatus("approved");
-        app.setUpdateTime(new Date());
-        applicationMapper.updateById(app);
         
         AttendanceRecord record = recordMapper.selectById(app.getRecordId());
         if (record != null) {
@@ -82,37 +79,29 @@ public class ApplicationService {
             recordMapper.updateById(record);
         }
         
-        ApplicationResult result = new ApplicationResult();
-        result.success = true;
-        result.message = "审批通过";
-        return result;
+        return result(true, "审批通过");
     }
 
     @Transactional
     public ApplicationResult rejectApplication(Integer applicationId, String rejectReason) {
         AttendanceApplication app = applicationMapper.selectById(applicationId);
         if (app == null) {
-            ApplicationResult result = new ApplicationResult();
-            result.success = false;
-            result.message = "申请不存在";
-            return result;
+            return result(false, "申请不存在");
         }
-        
-        if (!"pending".equals(app.getStatus())) {
-            ApplicationResult result = new ApplicationResult();
-            result.success = false;
-            result.message = "该申请已处理";
-            return result;
+
+        int updated = applicationMapper.updateStatusIfPending(
+                applicationId, "rejected", rejectReason, new Date()
+        );
+        if (updated == 0) {
+            return result(false, "该申请已处理");
         }
-        
-        app.setStatus("rejected");
-        app.setRejectReason(rejectReason);
-        app.setUpdateTime(new Date());
-        applicationMapper.updateById(app);
-        
+        return result(true, "已拒绝申请");
+    }
+
+    private ApplicationResult result(boolean success, String message) {
         ApplicationResult result = new ApplicationResult();
-        result.success = true;
-        result.message = "已拒绝申请";
+        result.success = success;
+        result.message = message;
         return result;
     }
 

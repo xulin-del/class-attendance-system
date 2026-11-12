@@ -3,10 +3,12 @@ package com.attendance.mapper;
 import com.attendance.entity.AttendanceRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public interface AttendanceRecordMapper extends BaseMapper<AttendanceRecord> {
+    AttendanceRecord selectByIdForUpdate(@Param("recordId") Integer recordId);
     List<AttendanceRecord> selectByCourseId(@Param("courseId") Integer courseId);
     List<AttendanceRecord> selectByStudentId(@Param("studentId") String studentId);
     AttendanceRecord selectByCourseIdAndStudentId(@Param("courseId") Integer courseId, @Param("studentId") String studentId);
@@ -18,4 +20,10 @@ public interface AttendanceRecordMapper extends BaseMapper<AttendanceRecord> {
     Integer countCoursesByTeacherId(@Param("teacherId") String teacherId);
     Integer countStudentsByTeacherId(@Param("teacherId") String teacherId);
     Integer countTodaySignedByTeacherId(@Param("teacherId") String teacherId, @Param("date") String date);
+    int deleteByCourseId(@Param("courseId") Integer courseId);
+    int insertRoster(@Param("courseId") Integer courseId, @Param("className") String className,
+                     @Param("sessionKey") String sessionKey, @Param("createTime") Date createTime);
+    int markSignedBySession(@Param("sessionKey") String sessionKey, @Param("studentId") String studentId,
+                            @Param("signTime") Date signTime);
+    int markUnsignedAsAbsent(@Param("courseId") Integer courseId);
 }

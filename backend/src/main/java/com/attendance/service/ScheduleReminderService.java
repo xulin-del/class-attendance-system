@@ -65,11 +65,12 @@ public class ScheduleReminderService {
                 continue;
             }
 
-            if (signReminderMapper.countClassReminder(schedule.getId(), reminderDate) > 0) {
-                continue;
+            SignReminder reminder = buildReminder(schedule, today, startTime);
+            int inserted = signReminderMapper.insertIfAbsent(reminder);
+            if (inserted == 0) {
+                log.debug("课前提醒已存在，跳过重复生成: scheduleId={}, date={}",
+                        schedule.getId(), reminderDate);
             }
-
-            signReminderMapper.insert(buildReminder(schedule, today, startTime));
         }
     }
 
@@ -84,6 +85,7 @@ public class ScheduleReminderService {
         reminder.setReminderType("class");
         reminder.setScheduleId(schedule.getId());
         reminder.setReminderDate(Date.valueOf(today));
+        reminder.setCreateTime(new java.util.Date());
         reminder.setExpireTime(toDate(today, resolveExpireTime(schedule, startTime)));
         return reminder;
     }

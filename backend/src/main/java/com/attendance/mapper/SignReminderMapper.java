@@ -10,4 +10,5 @@ public interface SignReminderMapper extends BaseMapper<SignReminder> {
     List<SignReminder> selectPendingByStudentId(@Param("studentId") String studentId);
     int countClassReminder(@Param("scheduleId") Integer scheduleId, @Param("reminderDate") String reminderDate);
     void updateStatusById(@Param("id") Integer id, @Param("status") String status);
+    int insertIfAbsent(SignReminder reminder);
 }

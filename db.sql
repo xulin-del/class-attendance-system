@@ -37,6 +37,9 @@ CREATE TABLE IF NOT EXISTS attendance_records (
     sign_time DATETIME,
     status VARCHAR(10) NOT NULL DEFAULT '未签到',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    session_key VARCHAR(80),
+    INDEX idx_attendance_course_student (course_id, student_id, create_time),
+    UNIQUE KEY uk_attendance_session_student (session_key, student_id),
     FOREIGN KEY (course_id) REFERENCES courses(course_id),
     FOREIGN KEY (student_id) REFERENCES students(student_id)
 );
@@ -63,6 +66,7 @@ CREATE TABLE IF NOT EXISTS location_signs (
     status VARCHAR(20) DEFAULT '进行中',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     end_time DATETIME,
+    INDEX idx_location_course_status (course_id, status, create_time),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 
@@ -75,6 +79,7 @@ CREATE TABLE IF NOT EXISTS digital_tokens (
     status VARCHAR(20) DEFAULT 'active',
     expire_time DATETIME,
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_digital_token_lookup (token, status, expire_time),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 

@@ -44,4 +44,14 @@
         SET status = #{status}
         WHERE id = #{id}
     </update>
+
+    <insert id="insertIfAbsent" parameterType="com.attendance.entity.SignReminder"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT IGNORE INTO sign_reminders
+            (course_id, course_name, class_name, sign_code, teacher_id, status,
+             reminder_type, schedule_id, reminder_date, create_time, expire_time)
+        VALUES
+            (#{courseId}, #{courseName}, #{className}, #{signCode}, #{teacherId}, #{status},
+             #{reminderType}, #{scheduleId}, #{reminderDate}, #{createTime}, #{expireTime})
+    </insert>
 </mapper>

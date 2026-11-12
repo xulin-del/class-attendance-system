@@ -3,6 +3,7 @@ package com.attendance.mapper;
 import com.attendance.entity.AttendanceApplication;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import java.util.Date;
 import java.util.List;
 
 public interface AttendanceApplicationMapper extends BaseMapper<AttendanceApplication> {
@@ -10,4 +11,7 @@ public interface AttendanceApplicationMapper extends BaseMapper<AttendanceApplic
     List<AttendanceApplication> selectPendingByTeacherId(@Param("teacherId") String teacherId);
     int countPendingByTeacherId(@Param("teacherId") String teacherId);
     List<AttendanceApplication> selectByStudentId(@Param("studentId") String studentId);
+    int updateStatusIfPending(@Param("id") Integer id, @Param("status") String status,
+                              @Param("rejectReason") String rejectReason, @Param("updateTime") Date updateTime);
+    int insertIfAbsent(AttendanceApplication application);
 }

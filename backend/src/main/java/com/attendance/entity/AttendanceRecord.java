@@ -15,6 +15,7 @@ public class AttendanceRecord {
     private Date signTime;
     private String status;
     private Date createTime;
+    private String sessionKey;
     @TableField(exist = false)
     private String studentName;
 
@@ -53,6 +54,12 @@ public class AttendanceRecord {
     }
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+    public String getSessionKey() {
+        return sessionKey;
+    }
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
     }
     public String getStudentName() {
         return studentName;

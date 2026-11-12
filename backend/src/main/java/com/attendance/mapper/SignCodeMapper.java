@@ -7,6 +7,7 @@ import java.util.Date;
 
 public interface SignCodeMapper extends BaseMapper<SignCode> {
     SignCode selectActiveBySignCode(@Param("signCode") String signCode);
+    SignCode selectActiveByCourseId(@Param("courseId") Integer courseId);
     void expireByCourseId(@Param("courseId") Integer courseId);
     void cleanExpired(@Param("now") Date now);
 }

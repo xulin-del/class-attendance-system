@@ -47,4 +47,23 @@
         WHERE aa.student_id = #{studentId}
         ORDER BY aa.create_time DESC
     </select>
+
+    <update id="updateStatusIfPending">
+        UPDATE attendance_applications
+        SET status = #{status},
+            reject_reason = #{rejectReason},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+          AND status = 'pending'
+    </update>
+
+    <insert id="insertIfAbsent" parameterType="com.attendance.entity.AttendanceApplication"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT IGNORE INTO attendance_applications
+            (record_id, course_id, student_id, course_name, absence_date, reason, images,
+             status, create_time, update_time)
+        VALUES
+            (#{recordId}, #{courseId}, #{studentId}, #{courseName}, #{absenceDate}, #{reason}, #{images},
+             #{status}, #{createTime}, #{updateTime})
+    </insert>
 </mapper>

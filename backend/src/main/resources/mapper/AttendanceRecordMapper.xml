@@ -8,8 +8,17 @@
         <result property="signTime" column="sign_time"/>
         <result property="status" column="status"/>
         <result property="createTime" column="create_time"/>
+        <result property="sessionKey" column="session_key"/>
         <result property="studentName" column="student_name"/>
     </resultMap>
+
+    <select id="selectByIdForUpdate" resultMap="AttendanceRecordMap">
+        SELECT ar.*, s.student_name
+        FROM attendance_records ar
+        LEFT JOIN students s ON ar.student_id = s.student_id
+        WHERE ar.record_id = #{recordId}
+        FOR UPDATE
+    </select>
     
     <select id="selectByCourseId" resultMap="AttendanceRecordMap">
         SELECT ar.*, s.student_name 
@@ -28,12 +37,40 @@
     </select>
     
     <select id="selectByCourseIdAndStudentId" resultType="com.attendance.entity.AttendanceRecord">
-        SELECT record_id AS recordId, course_id AS courseId, student_id AS studentId, sign_time AS signTime, status, create_time AS createTime
+        SELECT record_id AS recordId, course_id AS courseId, student_id AS studentId,
+               sign_time AS signTime, status, create_time AS createTime, session_key AS sessionKey
         FROM attendance_records 
         WHERE course_id = #{courseId} AND student_id = #{studentId}
-        ORDER BY create_time DESC
+        ORDER BY create_time DESC, record_id DESC
         LIMIT 1
     </select>
+
+    <delete id="deleteByCourseId">
+        DELETE FROM attendance_records WHERE course_id = #{courseId}
+    </delete>
+
+    <insert id="insertRoster">
+        INSERT INTO attendance_records
+            (course_id, student_id, status, create_time, session_key)
+        SELECT #{courseId}, student_id, '未签到', #{createTime}, #{sessionKey}
+        FROM students
+        WHERE class_name = #{className}
+    </insert>
+
+    <update id="markSignedBySession">
+        UPDATE attendance_records
+        SET status = '已签到', sign_time = #{signTime}
+        WHERE session_key = #{sessionKey}
+          AND student_id = #{studentId}
+          AND status = '未签到'
+    </update>
+
+    <update id="markUnsignedAsAbsent">
+        UPDATE attendance_records
+        SET status = '缺勤'
+        WHERE course_id = #{courseId}
+          AND status = '未签到'
+    </update>
     
     <select id="selectDailyStatsByTeacherId" resultType="java.util.Map">
         SELECT 

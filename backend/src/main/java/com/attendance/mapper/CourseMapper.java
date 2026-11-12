@@ -8,4 +8,6 @@ import java.util.List;
 public interface CourseMapper extends BaseMapper<Course> {
     List<Course> selectByTeacherId(@Param("teacherId") String teacherId);
     List<Course> selectByClassName(@Param("className") String className);
+    Course selectByIdForUpdate(@Param("courseId") Integer courseId);
+    Course selectByIdForShare(@Param("courseId") Integer courseId);
 }

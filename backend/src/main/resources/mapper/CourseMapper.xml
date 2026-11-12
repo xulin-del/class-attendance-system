@@ -11,4 +11,16 @@
         FROM courses 
         WHERE class_name = #{className}
     </select>
+    <select id="selectByIdForUpdate" resultType="com.attendance.entity.Course">
+        SELECT course_id AS courseId, course_name AS courseName, teacher_id AS teacherId, class_name AS className
+        FROM courses
+        WHERE course_id = #{courseId}
+        FOR UPDATE
+    </select>
+    <select id="selectByIdForShare" resultType="com.attendance.entity.Course">
+        SELECT course_id AS courseId, course_name AS courseName, teacher_id AS teacherId, class_name AS className
+        FROM courses
+        WHERE course_id = #{courseId}
+        FOR SHARE
+    </select>
 </mapper>
